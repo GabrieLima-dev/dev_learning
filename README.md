@@ -1,4 +1,4 @@
-# DEV_LEARNING - TESTE SALA
+# DEV_LEARNING
 
 ## Objetivo
 

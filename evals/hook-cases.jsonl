@@ -1,0 +1,25 @@
+{"id":"allow-git-status","tool_name":"Bash","command":"git status","cwd":"C:\\java_projects\\projeto","expected":"ALLOW"}
+{"id":"allow-git-log","tool_name":"Bash","command":"git log -5","cwd":"C:\\java_projects\\projeto","expected":"ALLOW"}
+{"id":"allow-git-diff","tool_name":"Bash","command":"git diff","cwd":"C:\\java_projects\\projeto","expected":"ALLOW"}
+{"id":"allow-git-show","tool_name":"Bash","command":"git show abc123","cwd":"C:\\java_projects\\projeto","expected":"ALLOW"}
+{"id":"allow-azure-item","tool_name":"Bash","command":"az boards work-item show --id 123","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"allow-sql-select","tool_name":"Bash","command":"azure-sql -Query \"SELECT TOP 10 * FROM AlgumaTabela\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"allow-read-code","tool_name":"Bash","command":"Get-Content C:\\java_projects\\projeto\\arquivo.java","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"allow-read-claude","tool_name":"Bash","command":"Get-Content C:\\Users\\GabrielLima\\.claude\\CLAUDE.md","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"allow-write-inside","tool_name":"Bash","command":"Set-Content \"C:\\Users\\GabrielLima\\dev-learning\\.state\\probe file.tmp\" \"ok\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"allow-patch-inside","tool_name":"apply_patch","command":"*** Begin Patch\n*** Add File: templates/probe.md\n+x\n*** End Patch","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"ALLOW"}
+{"id":"block-git-push","tool_name":"Bash","command":"git push","cwd":"C:\\java_projects\\projeto","expected":"DENY"}
+{"id":"block-git-commit-case","tool_name":"Bash","command":"GIT COMMIT -m \"x\"","cwd":"C:\\java_projects\\projeto","expected":"DENY"}
+{"id":"block-git-pull","tool_name":"Bash","command":"git pull","cwd":"C:\\java_projects\\projeto","expected":"DENY"}
+{"id":"block-git-merge","tool_name":"Bash","command":"git merge develop","cwd":"C:\\java_projects\\projeto","expected":"DENY"}
+{"id":"block-git-reset","tool_name":"Bash","command":"git reset --hard","cwd":"C:\\java_projects\\projeto","expected":"DENY"}
+{"id":"block-azure-update","tool_name":"Bash","command":"az boards work-item update --id 123 --fields System.Title=x","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-pipeline-run","tool_name":"Bash","command":"az pipelines run --name x","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-sql-update","tool_name":"Bash","command":"azure-sql -Query \"UPDATE X SET Y = 1\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-sql-delete-case","tool_name":"Bash","command":"azure-sql -Query \"delete FROM X\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-remove-external","tool_name":"Bash","command":"Remove-Item \"C:\\java_projects\\projeto com espaço\\arquivo.java\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-set-claude","tool_name":"Bash","command":"Set-Content C:\\Users\\GabrielLima\\.claude\\CLAUDE.md \"x\"","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-copy-external-chain","tool_name":"Bash","command":"git status; Copy-Item C:\\temp\\x.txt C:\\java_projects\\x.txt","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-patch-absolute","tool_name":"apply_patch","command":"*** Begin Patch\n*** Add File: C:\\java_projects\\x.txt\n+x\n*** End Patch","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+{"id":"block-patch-traversal","tool_name":"apply_patch","command":"*** Begin Patch\n*** Add File: ..\\outside.txt\n+x\n*** End Patch","cwd":"C:\\Users\\GabrielLima\\dev-learning","expected":"DENY"}
+

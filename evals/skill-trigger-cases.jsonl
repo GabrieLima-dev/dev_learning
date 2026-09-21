@@ -1,0 +1,9 @@
+{"id":"start-bug","prompt":"quero começar a estudar o bug 123","expected_skill":"start-item"}
+{"id":"start-pib","prompt":"vamos iniciar o aprendizado de um PIB que finalizei","expected_skill":"start-item"}
+{"id":"investigate","prompt":"quero entender como esse item foi resolvido","expected_skill":"investigate-item"}
+{"id":"learning","prompt":"me faça perguntas sobre o item","expected_skill":"learning-session"}
+{"id":"review","prompt":"vamos revisar o bug da semana passada","expected_skill":"review-item"}
+{"id":"planning","prompt":"quero praticar a planning","expected_skill":"planning-review"}
+{"id":"consolidate","prompt":"vamos consolidar o que aprendi nesses bugs","expected_skill":"consolidate-knowledge"}
+{"id":"negative-generic-java","prompt":"explique genericamente o que é Predicate em Java","expected_skill":null}
+

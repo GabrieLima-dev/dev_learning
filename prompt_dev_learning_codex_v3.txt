@@ -1,0 +1,3649 @@
+PROMPT-MESTRE COMPLETO V3 — DEV_LEARNING PARA CODEX
+====================================================
+
+INSTRUÇÃO PRINCIPAL AO CODEX
+----------------------------
+
+Leia este documento por completo antes de começar.
+
+Sua tarefa é CRIAR ou ATUALIZAR, de forma concreta, funcional e testável, o projeto:
+
+C:\Users\GabrielLima\dev-learning
+
+Não apenas explique o que deveria ser criado.
+
+Crie os arquivos, Skills, referências, subagentes, hooks, scripts, templates, evals e configurações descritos neste documento.
+
+Se o projeto já existir:
+- preserve dados de aprendizagem existentes;
+- migre a estrutura antiga para esta V3;
+- não apague `items`, `knowledge`, `reviews` ou `.state` sem necessidade;
+- não sobrescreva respostas originais do usuário;
+- faça a migração de forma segura.
+
+Ao final:
+- valide a estrutura;
+- execute os testes locais possíveis;
+- apresente a árvore final;
+- apresente PASS/FAIL dos testes;
+- informe limitações reais;
+- diga como iniciar o primeiro/próximo item.
+
+Se alguma configuração descrita aqui não corresponder à versão atual do Codex instalada:
+- consulte a documentação oficial atual disponível;
+- use a forma atualmente suportada;
+- explique brevemente a diferença;
+- não mantenha configuração obsoleta apenas para seguir literalmente este documento.
+
+
+================================================================
+1. PROPÓSITO DO DEV_LEARNING
+================================================================
+
+O `dev-learning` é um ambiente pessoal de aprendizagem técnica e de regra
+de negócio para ser usado pelo Codex dentro do VS Code.
+
+Contexto de trabalho:
+
+- Java 25;
+- Quarkus;
+- Maven;
+- SQL Server / Azure SQL;
+- Docker;
+- Azure DevOps;
+- Git;
+- microsserviços;
+- sistemas do domínio financeiro;
+- MyCapital.
+
+O desenvolvedor utiliza Claude no trabalho principalmente para:
+- investigar;
+- planejar;
+- implementar;
+- alterar código;
+- validar a solução durante o trabalho.
+
+Depois que um PIB ou BUG já foi trabalhado, o Codex assume outro papel.
+
+O Codex NÃO deve refazer o trabalho do Claude.
+
+O Codex deve funcionar como:
+
+- tutor técnico;
+- leitor da solução;
+- reconstrutor de raciocínio;
+- explicador de arquitetura;
+- treinador de recuperação ativa;
+- avaliador de entendimento;
+- preparador para Planning;
+- consolidador de conhecimento.
+
+Objetivo principal:
+
+"ENTENDER DE VERDADE O QUE FOI FEITO, COMO FOI FEITO, POR QUE FOI FEITO
+E QUAL REGRA DE NEGÓCIO EXISTE POR TRÁS."
+
+O projeto deve ajudar o usuário a deixar de pensar apenas:
+
+"Eu alterei este método."
+
+e chegar a:
+
+"Eu consigo explicar o problema, a decisão tomada, a regra envolvida,
+o fluxo do código, a alteração realizada e por que ela resolve o problema."
+
+
+================================================================
+2. DIVISÃO DE RESPONSABILIDADES
+================================================================
+
+CLAUDE
+------
+
+Responsável principalmente por:
+
+- desenvolvimento;
+- implementação;
+- investigação durante o trabalho;
+- plano técnico;
+- alteração do código;
+- auxílio na validação original da solução.
+
+Os planos existentes do Claude são uma fonte de contexto para o Codex.
+
+
+CODEX + DEV_LEARNING
+--------------------
+
+Responsável por:
+
+- compreender o item já resolvido;
+- compreender o plano do Claude;
+- comparar plano × implementação;
+- ler a branch;
+- entender o fluxo do código;
+- entender regra de negócio;
+- consultar Skills MyCapital quando necessário;
+- consultar SQL apenas quando necessário para entendimento;
+- questionar o usuário;
+- verificar se o usuário consegue explicar;
+- revisar conhecimento;
+- preparar Planning;
+- consolidar padrões recorrentes.
+
+
+================================================================
+3. O QUE O DEV_LEARNING NÃO É
+================================================================
+
+O projeto NÃO é:
+
+- ambiente de codificação corporativa;
+- ambiente de correção de BUG;
+- ferramenta de code review;
+- ferramenta de refatoração;
+- ambiente de teste;
+- ambiente de reprodução de BUG;
+- ferramenta de alteração de banco;
+- ferramenta de alteração de Azure DevOps.
+
+O Codex NÃO deve:
+
+- reimplementar solução;
+- alterar código da empresa;
+- reproduzir novamente o BUG;
+- iniciar aplicação para testar correção;
+- executar endpoint para validar novamente;
+- rerodar suíte de testes para comprovar a solução;
+- tentar encontrar uma solução alternativa;
+- propor refatoração não solicitada;
+- modificar branch;
+- modificar PR;
+- modificar Work Item;
+- modificar dados no banco;
+- investigar indefinidamente depois que a solução estiver suficientemente entendida.
+
+
+================================================================
+4. PRINCÍPIOS PEDAGÓGICOS
+================================================================
+
+O projeto NÃO deve virar um gerador de resumo.
+
+O aprendizado deve acontecer por:
+
+investigação
+→ compreensão
+→ explicação do usuário
+→ identificação de lacunas
+→ correção de entendimento
+→ recuperação ativa
+→ revisão espaçada
+→ aplicação em Planning
+→ consolidação entre itens.
+
+
+----------------------------------------------------------------
+4.1 ACTIVE RECALL BEFORE EXPLANATION
+----------------------------------------------------------------
+
+Quando o objetivo for verificar aprendizado:
+
+1. faça UMA pergunta por vez;
+2. peça ao usuário que responda primeiro;
+3. não mostre o gabarito antes da resposta;
+4. preserve a resposta original;
+5. compare com a reconstrução da solução;
+6. indique objetivamente o que está correto;
+7. indique o que está incompleto;
+8. faça uma próxima pergunta direcionada;
+9. explique diretamente somente quando necessário.
+
+Evitar:
+
+- questionários gigantes;
+- múltiplas perguntas ao mesmo tempo;
+- perguntas triviais de memorização;
+- elogios genéricos.
+
+
+----------------------------------------------------------------
+4.2 SOLUTION RECONSTRUCTION
+----------------------------------------------------------------
+
+A atividade principal da investigação é reconstruir uma solução já pronta.
+
+Fluxo conceitual:
+
+PROBLEMA
+↓
+PLANO DO CLAUDE
+↓
+CAUSA / MECANISMO DESCRITO NO PLANO
+↓
+ESTRATÉGIA ESCOLHIDA
+↓
+ALTERAÇÕES REALIZADAS NA BRANCH
+↓
+FLUXO DO CÓDIGO
+↓
+REGRA DE NEGÓCIO
+↓
+POR QUE A ALTERAÇÃO RESOLVE
+
+
+----------------------------------------------------------------
+4.3 PLAN FIRST
+----------------------------------------------------------------
+
+Depois de compreender o Work Item, o plano do Claude deve ser a primeira
+fonte técnica consultada.
+
+Perguntas:
+
+- O que foi pensado?
+- Qual causa foi considerada?
+- Qual estratégia foi escolhida?
+- Quais arquivos seriam alterados?
+- Qual regra de negócio foi mencionada?
+- Que cuidados foram considerados?
+
+Depois o Codex verifica:
+
+"Como esse plano virou código?"
+
+
+----------------------------------------------------------------
+4.4 IMPLEMENTATION SECOND
+----------------------------------------------------------------
+
+Depois do plano, analisar a branch.
+
+Usar somente comandos read-only.
+
+Identificar:
+
+- commits;
+- diff;
+- arquivos;
+- classes;
+- métodos;
+- parâmetros;
+- queries;
+- código removido;
+- testes alterados;
+- propagação de dados.
+
+O objetivo NÃO é revisar a qualidade.
+
+O objetivo é compreender a implementação.
+
+
+----------------------------------------------------------------
+4.5 PROGRESSIVE DISCLOSURE
+----------------------------------------------------------------
+
+Skills devem ser pequenas.
+
+Detalhes devem ficar em `references/`.
+
+Scripts determinísticos ficam em `scripts/`.
+
+Não carregar:
+
+- todas as Skills MyCapital;
+- todos os arquivos do projeto;
+- todas as referências;
+- todos os itens anteriores.
+
+Carregar somente o necessário para o passo atual.
+
+
+----------------------------------------------------------------
+4.6 EVIDENCE WITHOUT OVER-INVESTIGATION
+----------------------------------------------------------------
+
+Classificar afirmações relevantes como:
+
+VERIFIED
+Confirmado por alguma fonte concreta.
+
+INFERRED
+Conclusão razoável, mas não explicitamente confirmada.
+
+UNKNOWN
+Não há material suficiente.
+
+GENERAL_KNOWLEDGE
+Conhecimento geral de Java, Quarkus, SQL ou arquitetura.
+
+Não iniciar uma investigação forense apenas para transformar tudo em VERIFIED.
+
+Se o item + plano + branch + código forem suficientes:
+parar.
+
+
+----------------------------------------------------------------
+4.7 LEARNING FROM REAL WORK
+----------------------------------------------------------------
+
+Ensinar conceitos somente quando aparecerem no item.
+
+Exemplos:
+
+- Java;
+- Predicate;
+- Stream;
+- Optional;
+- Lambda;
+- generics;
+- annotations;
+- CDI;
+- Quarkus;
+- RESTEasy;
+- Maven;
+- DAO;
+- Service;
+- Query XML;
+- SQL;
+- Open Finance;
+- renda fixa;
+- fundos;
+- Bolsa;
+- posição;
+- rentabilidade;
+- testes;
+- integração;
+- cache.
+
+Evitar aulas genéricas desconectadas.
+
+
+================================================================
+5. CAMINHOS DO AMBIENTE
+================================================================
+
+Usuário Windows:
+
+C:\Users\GabrielLima
+
+Projeto:
+
+C:\Users\GabrielLima\dev-learning
+
+Planos do Claude:
+
+C:\Users\GabrielLima\.claude\plans
+
+Instruções globais corporativas:
+
+C:\Users\GabrielLima\.claude\CLAUDE.md
+
+Skills/plugins corporativos MyCapital:
+
+C:\Users\GabrielLima\.claude\plugins\cache\mycapital\mycapital-backend
+
+Projetos Java:
+
+C:\java_projects
+
+
+================================================================
+6. SEGURANÇA — NÃO NEGOCIÁVEL
+================================================================
+
+O Codex pode escrever SOMENTE dentro de:
+
+C:\Users\GabrielLima\dev-learning
+
+Tudo fora é SOMENTE LEITURA.
+
+Especialmente:
+
+C:\Users\GabrielLima\.claude
+C:\Users\GabrielLima\.claude\plans
+C:\Users\GabrielLima\.claude\plugins\cache\mycapital\mycapital-backend
+C:\java_projects
+Azure DevOps
+Azure SQL
+
+
+----------------------------------------------------------------
+6.1 GIT
+----------------------------------------------------------------
+
+Permitido:
+
+git status
+git log
+git show
+git diff
+git branch --show-current
+git rev-parse
+git blame
+git grep
+git ls-files
+git remote -v
+
+e somente outros comandos inequivocamente de leitura.
+
+Proibido:
+
+git add
+git commit
+git push
+git pull
+git merge
+git rebase
+git reset
+git restore
+git checkout quando puder modificar working tree
+git switch
+git stash
+git clean
+git cherry-pick
+git revert
+git tag com criação/alteração
+
+Se houver dúvida se um comando modifica estado:
+NÃO executar.
+
+
+----------------------------------------------------------------
+6.2 AZURE DEVOPS
+----------------------------------------------------------------
+
+Azure DevOps é SOMENTE LEITURA.
+
+Permitidos quando necessários:
+
+az boards work-item show
+az boards query
+az repos pr show
+az repos pr list
+az repos show
+az repos list
+az devops configure --list
+az account show
+
+Proibido:
+
+create
+update
+delete
+merge
+approve
+vote
+queue
+run
+qualquer alteração.
+
+
+----------------------------------------------------------------
+6.3 AZURE SQL
+----------------------------------------------------------------
+
+SQL é uma fonte OPCIONAL.
+
+Antes de QUALQUER consulta:
+
+ler obrigatoriamente:
+
+C:\Users\GabrielLima\.claude\CLAUDE.md
+
+Nunca duplicar credenciais/configuração no dev-learning.
+
+Usar somente o mecanismo existente definido nesse arquivo.
+
+Atualmente o procedimento utiliza:
+
+azure-sql -Query "<T-SQL>"
+
+e também pode conter modo Entra/Azure CLI.
+
+O dev-learning trata o banco como SOMENTE LEITURA.
+
+Permitido:
+
+SELECT
+WITH de leitura
+sys.*
+INFORMATION_SCHEMA.*
+metadados
+diagnóstico read-only
+
+Proibido:
+
+INSERT
+UPDATE
+DELETE
+MERGE
+TRUNCATE
+DROP
+ALTER
+CREATE
+GRANT
+REVOKE
+DENY
+DBCC mutável
+EXEC/EXECUTE mutável
+DDL
+DML de escrita
+comandos administrativos
+
+Para SELECT não agregado:
+usar TOP 1000.
+
+Preferir janela temporal curta e próxima ao evento.
+
+Nunca:
+
+- pedir senha;
+- pedir JWT;
+- pedir token;
+- exibir token;
+- exibir senha;
+- armazenar segredo;
+- registrar segredo em logs;
+- copiar credenciais para arquivos.
+
+
+----------------------------------------------------------------
+6.4 ENDPOINTS E TESTES
+----------------------------------------------------------------
+
+O CLAUDE.md pode conter procedimentos de teste de endpoint.
+
+O dev-learning NÃO deve utilizá-los para revalidar um item já concluído.
+
+Pode LER:
+
+- teste criado;
+- teste alterado;
+- endpoint envolvido;
+- cenário documentado.
+
+Não deve EXECUTAR novamente apenas para validar a correção.
+
+
+================================================================
+7. FONTES E ORDEM DE USO
+================================================================
+
+Para cada item, seguir esta ordem:
+
+1. AZURE DEVOPS
+   entender problema e contexto.
+
+2. PLANO DO CLAUDE
+   entender raciocínio e estratégia.
+
+3. BRANCH / GIT
+   entender o que realmente mudou.
+
+4. CÓDIGO
+   entender fluxo.
+
+5. SKILLS MYCAPITAL
+   esclarecer arquitetura/padrões quando necessário.
+
+6. SQL
+   somente quando necessário para compreender dados/regra.
+
+7. CONHECIMENTO GERAL
+   somente como complemento.
+
+Essa ordem é obrigatória salvo motivo técnico claro.
+
+
+================================================================
+8. ORDEM DE CONFIANÇA
+================================================================
+
+Para afirmar o que foi efetivamente implementado:
+
+1. código real;
+2. Git/diff;
+3. Skills MyCapital;
+4. Azure Work Item;
+5. plano Claude;
+6. SQL;
+7. conhecimento geral.
+
+Observações:
+
+- plano representa intenção/estratégia;
+- branch representa implementação;
+- Skill corporativa representa padrão/documentação;
+- banco representa estado/dado;
+- código representa comportamento implementado.
+
+Quando houver divergência:
+registrar a divergência.
+
+
+================================================================
+9. ESTRUTURA FINAL DO PROJETO
+================================================================
+
+Criar:
+
+dev-learning\
+│
+├── AGENTS.md
+├── README.md
+│
+├── .gitignore
+│
+├── .codex\
+│   ├── config.toml
+│   ├── hooks.json
+│   ├── agents\
+│   │   ├── evidence-explorer.toml
+│   │   ├── solution-mapper.toml
+│   │   └── learning-assessor.toml
+│   └── hooks\
+│       ├── session-start.ps1
+│       └── pre-tool-guard.ps1
+│
+├── .agents\
+│   └── skills\
+│       ├── start-item\
+│       │   └── SKILL.md
+│       │
+│       ├── investigate-item\
+│       │   ├── SKILL.md
+│       │   └── references\
+│       │       ├── reconstruction-model.md
+│       │       ├── evidence-model.md
+│       │       ├── claude-plan-analysis.md
+│       │       ├── branch-analysis.md
+│       │       ├── mycapital-architecture.md
+│       │       ├── business-rule.md
+│       │       ├── code-flow.md
+│       │       └── sql-understanding.md
+│       │
+│       ├── learning-session\
+│       │   ├── SKILL.md
+│       │   └── references\
+│       │       ├── learning-levels.md
+│       │       ├── question-bank.md
+│       │       └── assessment-rules.md
+│       │
+│       ├── review-item\
+│       │   ├── SKILL.md
+│       │   └── references\
+│       │       └── spaced-review.md
+│       │
+│       ├── planning-review\
+│       │   ├── SKILL.md
+│       │   └── references\
+│       │       └── pcrcv.md
+│       │
+│       └── consolidate-knowledge\
+│           ├── SKILL.md
+│           └── references\
+│               └── knowledge-model.md
+│
+├── scripts\
+│   ├── list-claude-plans.ps1
+│   ├── get-ado-item.ps1
+│   ├── find-mycapital-skills.ps1
+│   ├── get-git-context.ps1
+│   ├── new-item-workspace.ps1
+│   ├── validate-dev-learning.ps1
+│   ├── run-skill-evals.ps1
+│   └── run-hook-tests.ps1
+│
+├── evals\
+│   ├── README.md
+│   ├── skill-trigger-cases.jsonl
+│   ├── behavior-cases.jsonl
+│   └── hook-cases.jsonl
+│
+├── templates\
+│   ├── item.md
+│   ├── reconstruction.md
+│   ├── evidence.md
+│   ├── business-rule.md
+│   ├── code-flow.md
+│   ├── my-understanding.md
+│   ├── review.md
+│   └── planning.md
+│
+├── items\
+├── knowledge\
+│   ├── business-rules\
+│   ├── architecture\
+│   ├── java\
+│   ├── sql\
+│   └── glossary\
+│
+├── reviews\
+│
+└── .state\
+    └── .gitkeep
+
+
+================================================================
+10. .gitignore
+================================================================
+
+Criar `.gitignore` adequado.
+
+Ignorar, quando existirem:
+
+- arquivos temporários;
+- logs;
+- resultados locais de avaliação;
+- caches;
+- arquivos de estado transitório que não devam ser versionados;
+- qualquer possível material de segredo.
+
+NÃO ignorar:
+
+- Skills;
+- references;
+- templates;
+- scripts;
+- eval definitions;
+- AGENTS.md;
+- README.md.
+
+Nunca versionar segredos.
+
+
+================================================================
+11. AGENTS.md — CONSTITUIÇÃO DO PROJETO
+================================================================
+
+Crie um AGENTS.md conciso porém completo.
+
+Deve estabelecer:
+
+1. propósito;
+2. Claude implementa / Codex aprende;
+3. solution reconstruction;
+4. active recall;
+5. progressive disclosure;
+6. read-only externo;
+7. Git read-only;
+8. Azure DevOps read-only;
+9. SQL somente leitura;
+10. obrigação de ler CLAUDE.md antes de SQL;
+11. não reproduzir BUG;
+12. não retestar correção;
+13. não executar endpoints para validação;
+14. não modificar código corporativo;
+15. não inventar regra de negócio;
+16. uma pergunta por vez;
+17. preservar respostas originais;
+18. não sobrescrever my-understanding;
+19. classificar VERIFIED / INFERRED / UNKNOWN / GENERAL_KNOWLEDGE;
+20. consultar Skills MyCapital sob demanda;
+21. parar quando a solução estiver suficientemente compreendida;
+22. evitar subagentes desnecessários;
+23. não gastar contexto lendo documentação irrelevante.
+
+Inclua também:
+
+"Não encontrado" não significa "não existe".
+
+"Comportamento implementado" não significa automaticamente "regra oficial".
+
+"Plano Claude" não significa automaticamente "implementação final".
+
+
+================================================================
+12. .codex/config.toml
+================================================================
+
+Criar configuração compatível com a versão atual do Codex.
+
+Objetivo:
+
+- habilitar subagentes;
+- limitar concorrência;
+- evitar consumo excessivo.
+
+Preferência:
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 3
+
+Se a sintaxe atual for diferente:
+usar a sintaxe oficial atual.
+
+Não fixar modelo específico sem necessidade.
+
+Todos os subagentes devem operar em:
+
+sandbox_mode = "read-only"
+
+ou equivalente oficial atual.
+
+
+================================================================
+13. SUBAGENTE: evidence-explorer
+================================================================
+
+Arquivo:
+
+.codex\agents\evidence-explorer.toml
+
+Nome lógico:
+
+evidence_explorer
+
+Objetivo:
+
+coletar fatos do item.
+
+Responsabilidades:
+
+- ler Azure Work Item;
+- ler plano selecionado;
+- investigar Git;
+- localizar arquivos;
+- localizar commits;
+- localizar métodos;
+- localizar queries;
+- localizar testes alterados;
+- comparar plano com branch;
+- apontar lacunas.
+
+Não:
+
+- ensinar;
+- avaliar resposta do usuário;
+- executar testes;
+- reproduzir BUG;
+- alterar arquivos;
+- propor refatoração;
+- executar SQL sem pedido específico do agente pai.
+
+Formato de retorno:
+
+## Facts
+
+## Azure context
+
+## Claude plan findings
+
+## Branch findings
+
+## Relevant files and symbols
+
+## Plan vs implementation differences
+
+## Open gaps
+
+
+================================================================
+14. SUBAGENTE: solution-mapper
+================================================================
+
+Arquivo:
+
+.codex\agents\solution-mapper.toml
+
+Nome lógico:
+
+solution_mapper
+
+Objetivo:
+
+transformar plano + branch + código em um mapa compreensível da solução.
+
+Responsabilidades:
+
+- identificar estratégia;
+- explicar implementação;
+- rastrear fluxo;
+- rastrear parâmetros;
+- identificar regra;
+- explicar por que a mudança altera o comportamento;
+- identificar diferenças entre plano e implementação;
+- consultar Skills MyCapital quando necessário.
+
+Não:
+
+- executar testes;
+- reproduzir BUG;
+- revalidar solução;
+- propor solução nova;
+- alterar código.
+
+Formato:
+
+## Problem
+
+## Strategy
+
+## Implemented changes
+
+## Execution flow
+
+## Data propagation
+
+## Business rule
+
+## Why the change solves the problem
+
+## Plan vs implementation
+
+## Remaining questions
+
+
+================================================================
+15. SUBAGENTE: learning-assessor
+================================================================
+
+Arquivo:
+
+.codex\agents\learning-assessor.toml
+
+Nome lógico:
+
+learning_assessor
+
+Objetivo:
+
+avaliar UMA resposta do usuário.
+
+Entrada esperada:
+
+- pergunta;
+- resposta original;
+- reconstruction.md;
+- claims relevantes.
+
+Retorno:
+
+CORRETO:
+...
+
+IMPRECISO:
+...
+
+FALTOU:
+...
+
+NÃO COMPROVADO:
+...
+
+NÍVEL:
+L1 | L2 | L3 | L4 | L5
+
+PRÓXIMA PERGUNTA:
+...
+
+Regras:
+
+- não reescrever resposta como se fosse do usuário;
+- não dar uma aula longa;
+- sugerir uma única próxima pergunta;
+- não usar nota numérica;
+- não fazer elogio genérico.
+
+
+================================================================
+16. SKILL: start-item
+================================================================
+
+Arquivo:
+
+.agents\skills\start-item\SKILL.md
+
+Frontmatter:
+
+---
+name: start-item
+description: Inicia o estudo de um PIB ou BUG já resolvido, vinculando o item do Azure DevOps ao plano usado pelo Claude e criando o workspace local de aprendizagem.
+---
+
+Workflow:
+
+PASSO 1
+
+Perguntar:
+
+"Qual foi o plano do Claude utilizado neste item?"
+
+Se usuário não souber:
+executar:
+
+scripts\list-claude-plans.ps1
+
+Mostrar apenas planos recentes.
+
+Não abrir todos.
+
+Usuário escolhe.
+
+
+PASSO 2
+
+Perguntar:
+
+"Qual é o link do item resolvido no Azure DevOps?"
+
+
+PASSO 3
+
+Extrair ID do Work Item.
+
+
+PASSO 4
+
+Executar:
+
+scripts\get-ado-item.ps1
+
+Somente leitura.
+
+
+PASSO 5
+
+Criar:
+
+items\<ID>-<slug-curto>\
+
+
+PASSO 6
+
+Copiar/inicializar templates:
+
+item.md
+reconstruction.md
+evidence.md
+business-rule.md
+code-flow.md
+my-understanding.md
+review.md
+planning.md
+
+
+PASSO 7
+
+Criar/atualizar:
+
+.state\active-item.json
+
+Estrutura mínima:
+
+{
+  "workItemId": "...",
+  "title": "...",
+  "itemFolder": "...",
+  "azureUrl": "...",
+  "claudePlanPath": "...",
+  "repositoryPath": null,
+  "branch": null,
+  "reconstructionStatus": "NOT_STARTED",
+  "startedAt": "ISO-8601"
+}
+
+
+PASSO 8
+
+ANTES de investigar, perguntar:
+
+"Sem consultar nada: com suas palavras, qual era o problema deste item
+e o que você lembra que foi feito para resolvê-lo?"
+
+
+PASSO 9
+
+Registrar a resposta literalmente em:
+
+my-understanding.md
+
+Seção:
+
+Entendimento inicial — resposta original.
+
+
+PASSO 10
+
+Não corrigir ainda.
+
+Sugerir:
+
+$investigate-item
+
+
+================================================================
+17. SKILL: investigate-item
+================================================================
+
+Arquivo:
+
+.agents\skills\investigate-item\SKILL.md
+
+Frontmatter:
+
+---
+name: investigate-item
+description: Reconstrói como um PIB ou BUG já resolvido foi pensado e implementado, lendo o item, o plano do Claude, as alterações da branch e o código relacionado, usando Skills MyCapital e SQL apenas quando necessários.
+---
+
+Essa é a Skill principal de investigação.
+
+Ela deve ser ORQUESTRADORA.
+
+Não duplicar todo o conteúdo das references dentro dela.
+
+Referenciar:
+
+references/reconstruction-model.md
+references/evidence-model.md
+references/claude-plan-analysis.md
+references/branch-analysis.md
+references/mycapital-architecture.md
+references/business-rule.md
+references/code-flow.md
+references/sql-understanding.md
+
+
+Workflow obrigatório:
+
+1. carregar `.state\active-item.json`;
+
+2. ler `item.md`;
+
+3. entender o problema do Azure;
+
+4. ler SOMENTE o plano Claude selecionado;
+
+5. extrair estratégia do plano;
+
+6. descobrir repositório/branch;
+
+7. se necessário usar `get-git-context.ps1`;
+
+8. analisar alterações da branch;
+
+9. comparar plano × implementação;
+
+10. ler apenas o código relevante;
+
+11. mapear fluxo técnico;
+
+12. mapear regra de negócio;
+
+13. consultar Skills MyCapital somente se surgir necessidade arquitetural;
+
+14. consultar SQL somente se surgir uma dúvida de dado/regra que não possa
+    ser entendida pelas fontes anteriores;
+
+15. criar reconstruction.md;
+
+16. criar evidence.md;
+
+17. criar/atualizar business-rule.md;
+
+18. criar/atualizar code-flow.md;
+
+19. registrar dúvidas restantes;
+
+20. definir reconstructionStatus:
+
+COMPLETE
+PARTIAL
+UNKNOWN
+
+21. atualizar active-item.json;
+
+22. sugerir learning-session.
+
+Não executar testes.
+
+Não executar endpoint.
+
+Não reproduzir BUG.
+
+Não tentar encontrar outra solução.
+
+
+================================================================
+18. REFERENCE: reconstruction-model.md
+================================================================
+
+Arquivo:
+
+.agents\skills\investigate-item\references\reconstruction-model.md
+
+Este é o modelo principal.
+
+A reconstrução deve responder:
+
+
+## PROBLEMA
+
+O que estava acontecendo?
+
+
+## EXPECTED
+
+O que deveria acontecer?
+
+
+## CLAUDE PLAN
+
+O que o Claude planejou?
+
+
+## CAUSE IN PLAN
+
+Qual causa, mecanismo ou explicação o plano apresentou?
+
+
+## STRATEGY
+
+Qual estratégia foi escolhida?
+
+
+## BRANCH CHANGES
+
+O que realmente foi alterado?
+
+
+## CODE FLOW
+
+Como o comportamento percorre o código?
+
+
+## BUSINESS RULE
+
+Qual regra está relacionada?
+
+
+## WHY IT WORKS
+
+Por que essa alteração muda o comportamento?
+
+
+## DIFFERENCES FROM PLAN
+
+O que mudou entre plano e implementação?
+
+
+## OPEN QUESTIONS
+
+O que ainda não foi compreendido?
+
+
+Status:
+
+COMPLETE
+Suficiente para ensinar o item.
+
+PARTIAL
+Há lacunas importantes.
+
+UNKNOWN
+Fontes insuficientes.
+
+
+================================================================
+19. REFERENCE: claude-plan-analysis.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\claude-plan-analysis.md
+
+Objetivo:
+
+extrair somente informações úteis do plano.
+
+Extrair:
+
+- problema;
+- causa considerada;
+- estratégia;
+- arquivos previstos;
+- classes/métodos previstos;
+- parâmetros;
+- queries;
+- regra de negócio;
+- cuidados;
+- cenários;
+- solução proposta.
+
+Não copiar o plano inteiro.
+
+Criar modelo:
+
+PLANNED:
+...
+
+RATIONALE:
+...
+
+FILES_EXPECTED:
+...
+
+BUSINESS_RULE:
+...
+
+VALIDATION_ALREADY_DESCRIBED:
+...
+
+Depois preencher:
+
+IMPLEMENTED:
+...
+
+DIFFERENCES:
+...
+
+
+================================================================
+20. REFERENCE: branch-analysis.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\branch-analysis.md
+
+Objetivo:
+
+entender:
+
+"Como o plano virou código?"
+
+Usar:
+
+git status
+git branch --show-current
+git log
+git show
+git diff
+git blame quando útil
+
+Nunca usar comandos mutáveis.
+
+Identificar:
+
+- branch;
+- base quando conhecida;
+- commits;
+- arquivos alterados;
+- arquivos removidos;
+- classes;
+- métodos;
+- parâmetros;
+- queries;
+- binds;
+- testes alterados;
+- propagação de dados;
+- código antigo removido.
+
+Separar:
+
+### Planned and implemented
+
+### Implemented differently
+
+### Implemented but not mentioned in plan
+
+### Planned but not found
+
+Diferença não significa erro.
+
+Apenas documentar.
+
+
+================================================================
+21. REFERENCE: evidence-model.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\evidence-model.md
+
+Criar um ledger leve.
+
+Usar apenas para claims importantes.
+
+Formato:
+
+## CLAIM-001
+
+CLAIM:
+...
+
+STATUS:
+VERIFIED | INFERRED | UNKNOWN | GENERAL_KNOWLEDGE
+
+SOURCE_TYPE:
+AZURE_ITEM | CLAUDE_PLAN | GIT | CODE | MYCAPITAL_SKILL | SQL | TEST_FILE
+
+SOURCE:
+...
+
+REFERENCE:
+arquivo / método / commit / query / Skill
+
+NOTES:
+...
+
+CONFLICTS:
+...
+
+
+Claims típicos:
+
+- problema;
+- causa descrita;
+- estratégia;
+- principal alteração;
+- regra;
+- fluxo;
+- por que resolve.
+
+Regras:
+
+- não criar dezenas de claims irrelevantes;
+- não encontrado != não existe;
+- plano != implementação;
+- código != regra oficial;
+- SQL prova dado/estado, não intenção.
+
+
+================================================================
+22. REFERENCE: code-flow.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\code-flow.md
+
+Objetivo:
+
+mapear somente o fluxo afetado.
+
+Modelo:
+
+SOURCE OF DATA
+↓
+ClassA.methodA(param)
+↓
+ClassB.methodB(param)
+↓
+Transformation
+↓
+Dao.method(param)
+↓
+:bind
+↓
+Query
+↓
+Behavior
+
+Registrar:
+
+- origem;
+- classe;
+- método;
+- parâmetro;
+- transformação;
+- próxima chamada;
+- DAO;
+- query;
+- retorno;
+- efeito funcional.
+
+Para propagação:
+
+origem
+→ A(param)
+→ B(param)
+→ DAO(param)
+→ bind
+→ query
+→ comportamento
+
+Explicar conceitos Java somente quando aparecerem.
+
+Exemplo:
+
+Se houver:
+
+Predicate<LocalDate>
+
+explicar:
+
+- o que é Predicate;
+- o que recebe;
+- o que retorna;
+- qual decisão aquele Predicate representa naquele item.
+
+Não transformar isso numa aula completa sobre programação funcional.
+
+
+================================================================
+23. REFERENCE: business-rule.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\business-rule.md
+
+Estrutura:
+
+## Problema percebido
+
+## Comportamento esperado
+
+## Regra de negócio
+
+## Comportamento implementado
+
+## Regra financeira, se existir
+
+## Condições
+
+## Exceções
+
+## Dados importantes
+
+## Onde a regra aparece no código
+
+## Origem da regra
+
+## Dúvidas
+
+Fontes prioritárias para regra:
+
+1. Azure Item;
+2. plano;
+3. Skills MyCapital;
+4. código;
+5. SQL quando necessário.
+
+Se algo só puder ser observado no código:
+
+usar:
+
+"comportamento implementado"
+
+não afirmar:
+
+"regra oficial de negócio"
+
+
+================================================================
+24. REFERENCE: mycapital-architecture.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\mycapital-architecture.md
+
+Fonte:
+
+C:\Users\GabrielLima\.claude\plugins\cache\mycapital\mycapital-backend
+
+Objetivo:
+
+usar o conhecimento corporativo existente para entender o código.
+
+Usar somente quando necessário.
+
+Exemplos:
+
+- papel de DAO;
+- organização dos Services;
+- Resource;
+- Business;
+- Facade;
+- queries XML;
+- padrão de integração;
+- cache;
+- mensageria;
+- testes;
+- convenções MyCapital.
+
+Procedimento:
+
+1. formular o assunto necessário;
+2. usar `find-mycapital-skills.ps1`;
+3. encontrar arquivos relevantes;
+4. ler somente esses arquivos;
+5. comparar com o código real;
+6. documentar o padrão;
+7. documentar divergência, se houver.
+
+Não copiar as Skills.
+
+Não ler toda a pasta.
+
+Código real demonstra implementação atual.
+
+Skill corporativa ajuda a explicar padrão/intenção.
+
+
+================================================================
+25. REFERENCE: sql-understanding.md
+================================================================
+
+Arquivo:
+
+investigate-item\references\sql-understanding.md
+
+SQL serve apenas para ENTENDIMENTO.
+
+Usar quando surgir pergunta como:
+
+- que registro é esse?
+- qual campo representa isso?
+- qual relação entre tabelas está envolvida?
+- por que determinado dado influencia a regra?
+- que tipo de dado está chegando à query?
+
+Antes de consultar:
+
+QUESTION:
+...
+
+WHY SQL IS NEEDED:
+...
+
+DATA NEEDED:
+...
+
+
+Depois:
+
+1. ler CLAUDE.md;
+2. usar procedimento existente;
+3. somente leitura;
+4. TOP 1000 quando aplicável;
+5. janela temporal curta;
+6. evitar volume grande;
+7. registrar somente resumo necessário.
+
+Não usar SQL para:
+
+- reproduzir BUG;
+- validar correção;
+- testar antes/depois;
+- comprovar que Claude fez certo.
+
+Se SQL não for necessário:
+
+registrar:
+
+"SQL não necessário para compreender este item."
+
+
+================================================================
+26. SKILL: learning-session
+================================================================
+
+Arquivo:
+
+.agents\skills\learning-session\SKILL.md
+
+Frontmatter:
+
+---
+name: learning-session
+description: Conduz uma sessão de recuperação ativa para verificar se o usuário compreendeu o problema, o plano, a implementação, a regra de negócio e o fluxo técnico da solução.
+---
+
+Pré-condição:
+
+investigate-item executado.
+
+Referências:
+
+references/learning-levels.md
+references/question-bank.md
+references/assessment-rules.md
+
+Workflow:
+
+1. carregar reconstruction.md;
+2. carregar apenas claims relevantes;
+3. escolher primeiro tópico;
+4. fazer UMA pergunta;
+5. esperar resposta;
+6. registrar resposta original;
+7. avaliar;
+8. fazer próxima pergunta;
+9. avançar níveis gradualmente;
+10. encerrar quando tópicos principais tiverem sido cobertos.
+
+Tópicos principais:
+
+- problema;
+- comportamento esperado;
+- plano;
+- estratégia;
+- implementação;
+- fluxo;
+- regra;
+- por que resolve.
+
+No final gerar:
+
+## Consolidado
+
+## Parcialmente consolidado
+
+## Ainda não consolidado
+
+## Próximas 3 perguntas de revisão
+
+
+================================================================
+27. REFERENCE: learning-levels.md
+================================================================
+
+L1 — EXPLICAR
+
+Objetivo:
+reproduzir conhecimento básico.
+
+Exemplos:
+
+- qual era o problema?
+- o que foi alterado?
+
+
+L2 — RASTREAR
+
+Objetivo:
+percorrer o código.
+
+Exemplos:
+
+- de onde esse parâmetro vem?
+- por quais métodos ele passa?
+- onde chega na query?
+
+
+L3 — JUSTIFICAR
+
+Objetivo:
+explicar o porquê.
+
+Exemplos:
+
+- por que trocar esse parâmetro?
+- que regra essa condição representa?
+- por que não bastava alterar somente a query?
+
+
+L4 — PREVER
+
+Objetivo:
+raciocinar sobre consequência.
+
+Exemplos:
+
+- o que aconteceria sem esse filtro?
+- o que ocorreria se o valor fosse null?
+- qual comportamento voltaria?
+
+
+L5 — TRANSFERIR
+
+Objetivo:
+aplicar padrão em outro contexto.
+
+Exemplos:
+
+- em que outro item esse padrão poderia aparecer?
+- que outro fluxo poderia ter propagação semelhante?
+- onde uma regra temporal parecida poderia existir?
+
+Progressão:
+
+L1 → L2 → L3 → L4 → L5
+
+Não avançar mecanicamente.
+
+Se fundamento estiver fraco:
+voltar ou permanecer.
+
+
+================================================================
+28. REFERENCE: question-bank.md
+================================================================
+
+Separar perguntas por domínio.
+
+Não carregar todas.
+
+Usar somente seções relacionadas ao item.
+
+
+PROBLEMA
+
+- qual era o comportamento incorreto?
+- quem ou qual fluxo era afetado?
+- qual era o comportamento esperado?
+
+
+PLANO
+
+- o que o Claude decidiu alterar?
+- qual estratégia foi escolhida?
+- por que essa estratégia fazia sentido?
+- quais arquivos estavam previstos?
+
+
+IMPLEMENTAÇÃO
+
+- o que realmente mudou?
+- qual diferença houve em relação ao plano?
+- qual código antigo foi removido?
+- qual novo dado passou a ser propagado?
+
+
+JAVA
+
+- onde o valor nasce?
+- onde é recebido?
+- por quais métodos passa?
+- que transformação ocorre?
+- que tipo funcional aparece?
+- qual responsabilidade da classe?
+
+
+SQL
+
+- qual bind é usado?
+- qual WHERE é afetado?
+- qual condição representa a regra?
+- qual dado entra ou deixa de entrar?
+
+
+REGRA DE NEGÓCIO
+
+- qual regra explica a mudança?
+- de onde sabemos essa regra?
+- quais condições existem?
+- quais exceções aparecem?
+
+
+ARQUITETURA
+
+- qual o papel deste DAO?
+- por que existe esse Service?
+- que padrão MyCapital aparece?
+- qual camada chama a próxima?
+
+
+SOLUÇÃO
+
+- por que essa alteração resolve?
+- por que a solução precisou atravessar várias camadas?
+- qual parte seria insuficiente sozinha?
+
+
+PLANNING
+
+- explique o problema em uma frase;
+- qual era a causa?
+- qual regra foi aplicada?
+- o que foi corrigido?
+- como havia sido validado originalmente?
+
+
+================================================================
+29. REFERENCE: assessment-rules.md
+================================================================
+
+Ao avaliar:
+
+CORRETO:
+...
+
+IMPRECISO:
+...
+
+FALTOU:
+...
+
+NÃO COMPROVADO:
+...
+
+NÍVEL ATUAL:
+L1 | L2 | L3 | L4 | L5
+
+PRÓXIMA PERGUNTA:
+...
+
+
+Classificação por tópico:
+
+CONSOLIDADO
+PARCIALMENTE_CONSOLIDADO
+AINDA_NAO_CONSOLIDADO
+
+Não usar nota numérica.
+
+Não comparar usuário com outros desenvolvedores.
+
+Não dizer apenas "correto".
+
+Explicar precisamente o que está correto.
+
+
+================================================================
+30. SKILL: review-item
+================================================================
+
+Arquivo:
+
+.agents\skills\review-item\SKILL.md
+
+Frontmatter:
+
+---
+name: review-item
+description: Revisa um item já estudado usando recuperação ativa, perguntas novas e dificuldade progressiva para reduzir esquecimento.
+---
+
+Referência:
+
+references/spaced-review.md
+
+Workflow:
+
+1. usuário escolhe item ou usar item ativo;
+2. verificar histórico de revisão;
+3. escolher dificuldade apropriada;
+4. fazer uma pergunta;
+5. registrar resposta;
+6. avaliar;
+7. continuar sem repetir mecanicamente perguntas antigas.
+
+Sugestão:
+
+D0
+D+1
+D+3
+D+7
+D+14
+
+Não automatizar agenda na V3.
+
+Apenas registrar próximas datas sugeridas.
+
+
+================================================================
+31. REFERENCE: spaced-review.md
+================================================================
+
+D0
+
+Objetivo:
+reconstrução completa.
+
+Perguntas sobre:
+- problema;
+- solução;
+- regra;
+- código.
+
+
+D+1
+
+Objetivo:
+recuperação rápida.
+
+Foco:
+- problema;
+- estratégia;
+- principal mudança.
+
+
+D+3
+
+Objetivo:
+conexão.
+
+Foco:
+- fluxo;
+- regra;
+- consequência.
+
+
+D+7
+
+Objetivo:
+explicação sem apoio.
+
+Pergunta central:
+
+"Explique esse item do começo ao fim sem consultar os arquivos."
+
+
+D+14
+
+Objetivo:
+Planning.
+
+Usar PCRCV.
+
+Não repetir literalmente as mesmas perguntas.
+
+
+================================================================
+32. SKILL: planning-review
+================================================================
+
+Arquivo:
+
+.agents\skills\planning-review\SKILL.md
+
+Frontmatter:
+
+---
+name: planning-review
+description: Simula a explicação dos PIBs e BUGs recentes em Planning usando Problema, Causa, Regra, Correção e Validação originalmente realizada.
+---
+
+Referência:
+
+references/pcrcv.md
+
+Workflow:
+
+1. identificar itens recentes;
+2. por padrão considerar aproximadamente últimas 2 semanas;
+3. permitir escolha manual;
+4. escolher um item;
+5. perguntar:
+
+"Explique este item como se estivesse na Planning."
+
+6. não interromper;
+7. avaliar PCRCV;
+8. fazer uma pergunta por vez;
+9. simular follow-up de PO, QA ou dev;
+10. gerar versão curta de 30–60 segundos;
+11. listar lacunas.
+
+IMPORTANTE:
+
+O Codex NÃO valida novamente.
+
+O "V" usa a validação originalmente registrada no item/plano/código/testes.
+
+
+================================================================
+33. REFERENCE: pcrcv.md
+================================================================
+
+PCRCV:
+
+P — PROBLEMA
+
+O que estava errado?
+
+
+C — CAUSA
+
+Por que acontecia?
+
+
+R — REGRA
+
+Qual regra de negócio explica o comportamento correto?
+
+
+C — CORREÇÃO
+
+O que foi alterado?
+
+
+V — VALIDAÇÃO
+
+Como a solução havia sido validada no trabalho original?
+
+Não executar nova validação.
+
+
+Modelo de resposta curta:
+
+"O problema era [...]. Isso acontecia porque [...]. A regra envolvida era
+[...]. A correção consistiu em [...]. Durante o trabalho, a solução foi
+validada por [...]."
+
+
+================================================================
+34. SKILL: consolidate-knowledge
+================================================================
+
+Arquivo:
+
+.agents\skills\consolidate-knowledge\SKILL.md
+
+Frontmatter:
+
+---
+name: consolidate-knowledge
+description: Consolida conhecimentos recorrentes aprendidos em vários itens sobre negócio, arquitetura, Java, SQL e glossário, mantendo rastreabilidade para os itens de origem.
+---
+
+Referência:
+
+references/knowledge-model.md
+
+Objetivo:
+
+não deixar cada BUG isolado.
+
+Consolidar somente:
+
+- conhecimento recorrente;
+- padrão arquitetural;
+- conceito técnico usado várias vezes;
+- regra de negócio útil;
+- termo de domínio.
+
+Destinos:
+
+knowledge\business-rules
+knowledge\architecture
+knowledge\java
+knowledge\sql
+knowledge\glossary
+
+Antes de criar novo arquivo:
+verificar se já existe tema equivalente.
+
+Não criar wiki gigantesca.
+
+
+================================================================
+35. REFERENCE: knowledge-model.md
+================================================================
+
+Cada conhecimento deve conter:
+
+# Conceito
+
+TYPE:
+BUSINESS_RULE | ARCHITECTURE | JAVA | SQL | GLOSSARY
+
+## Explicação
+
+## Onde apareceu
+
+## Itens de origem
+
+## Arquivos/classes relacionados
+
+## Exemplo
+
+## Exceções
+
+## Status
+
+VERIFIED | PARTIAL
+
+## Última revisão
+
+Não armazenar dados sensíveis.
+
+Não copiar grandes trechos de código corporativo.
+
+Preferir explicação.
+
+
+================================================================
+36. HOOK: SessionStart
+================================================================
+
+Criar:
+
+.codex\hooks\session-start.ps1
+
+Registrar em:
+
+.codex\hooks.json
+
+Evento:
+
+SessionStart
+
+Matcher preferido:
+
+startup|resume
+
+ou equivalente atual suportado.
+
+Objetivo:
+
+fornecer contexto mínimo.
+
+O script deve:
+
+1. receber JSON via stdin;
+2. localizar dev-learning;
+3. verificar `.state\active-item.json`;
+4. se houver item ativo, retornar:
+   - ID;
+   - título;
+   - pasta;
+   - plano;
+   - repo;
+   - branch;
+   - reconstructionStatus;
+   - próxima ação sugerida;
+5. se não houver:
+   informar:
+   "Nenhum item ativo. Use $start-item.";
+6. não ler toda a documentação;
+7. não consultar Azure;
+8. não consultar SQL;
+9. não escrever nada.
+
+Usar formato oficial atual do Codex.
+
+
+================================================================
+37. HOOK: PreToolUse
+================================================================
+
+Criar:
+
+.codex\hooks\pre-tool-guard.ps1
+
+Registrar para:
+
+- Bash;
+- apply_patch;
+- Edit;
+- Write;
+
+ou equivalentes atuais suportados.
+
+Objetivo:
+
+segunda camada de proteção.
+
+
+----------------------------------------------------------------
+37.1 GIT
+----------------------------------------------------------------
+
+Detectar comandos git.
+
+Permitir somente read-only.
+
+Bloquear mutáveis.
+
+Se ambíguo:
+bloquear.
+
+
+----------------------------------------------------------------
+37.2 AZURE
+----------------------------------------------------------------
+
+Permitir somente comandos aprovados de leitura.
+
+Bloquear os demais.
+
+
+----------------------------------------------------------------
+37.3 SQL
+----------------------------------------------------------------
+
+Se detectar azure-sql:
+
+bloquear queries contendo comandos mutáveis.
+
+Considerar case-insensitive:
+
+INSERT
+UPDATE
+DELETE
+MERGE
+TRUNCATE
+DROP
+ALTER
+CREATE
+GRANT
+REVOKE
+DENY
+EXEC
+EXECUTE
+
+Permitir leitura.
+
+
+----------------------------------------------------------------
+37.4 ARQUIVOS EXTERNOS
+----------------------------------------------------------------
+
+Bloquear escrita em:
+
+C:\Users\GabrielLima\.claude
+C:\java_projects
+repositoryPath do item ativo
+outros caminhos externos ao dev-learning
+
+Detectar PowerShell:
+
+Set-Content
+Add-Content
+Out-File
+Remove-Item
+Move-Item
+Copy-Item
+Rename-Item
+New-Item quando externo
+
+Detectar equivalentes:
+
+rm
+del
+erase
+mv
+cp
+
+
+Permitir leitura:
+
+Get-Content
+Get-ChildItem
+Select-String
+rg
+type
+dir
+
+
+----------------------------------------------------------------
+37.5 PATCH
+----------------------------------------------------------------
+
+Bloquear patch:
+
+- absoluto externo;
+- usando `..` para sair do dev-learning.
+
+
+----------------------------------------------------------------
+37.6 RETORNO
+----------------------------------------------------------------
+
+Quando bloquear:
+usar formato oficial atual de negação do PreToolUse.
+
+Motivo deve ser claro.
+
+Fail closed para comandos potencialmente destrutivos.
+
+Não impedir edição legítima dentro do dev-learning.
+
+
+================================================================
+38. hooks.json
+================================================================
+
+Criar `.codex\hooks.json` com sintaxe oficial atual.
+
+Registrar:
+
+SessionStart
+→ session-start.ps1
+
+PreToolUse Bash
+→ pre-tool-guard.ps1
+
+PreToolUse edição/patch
+→ pre-tool-guard.ps1
+
+Usar PowerShell no Windows.
+
+Exemplo conceitual de comando:
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "<script>"
+
+Não inventar campos se não forem suportados pela versão atual.
+
+Consultar documentação atual se necessário.
+
+
+================================================================
+39. SCRIPT: list-claude-plans.ps1
+================================================================
+
+Entrada:
+
+-Limit
+
+Default:
+
+10
+
+Fonte:
+
+C:\Users\GabrielLima\.claude\plans
+
+Saída:
+
+Index
+Name
+LastWriteTime
+FullPath
+
+Ordenar por data decrescente.
+
+Não modificar.
+
+Não ler conteúdo automaticamente.
+
+
+================================================================
+40. SCRIPT: get-ado-item.ps1
+================================================================
+
+Entrada:
+
+-Url
+
+ou:
+
+-Id
+
+Funções:
+
+1. validar;
+2. extrair ID;
+3. usar Azure CLI read-only;
+4. consultar Work Item;
+5. retornar JSON limpo.
+
+Campos úteis:
+
+id
+title
+workItemType
+state
+description
+acceptanceCriteria
+tags
+assignedTo quando útil
+relations resumidas
+url
+
+Não atualizar.
+
+Não instalar automaticamente ferramentas sem necessidade.
+
+Se extension não existir:
+informar.
+
+
+================================================================
+41. SCRIPT: find-mycapital-skills.ps1
+================================================================
+
+Entrada:
+
+-Query
+
+Raiz:
+
+C:\Users\GabrielLima\.claude\plugins\cache\mycapital\mycapital-backend
+
+Buscar:
+
+SKILL.md
+README*.md
+*.md relevantes
+
+Usar:
+
+- nome de arquivo;
+- conteúdo textual.
+
+Retornar quantidade razoável de resultados.
+
+Não despejar tudo.
+
+Não modificar.
+
+
+================================================================
+42. SCRIPT: get-git-context.ps1
+================================================================
+
+Entrada:
+
+-RepositoryPath
+
+Opcionais:
+
+-Branch
+-BaseBranch
+
+Somente leitura.
+
+Coletar:
+
+- branch atual;
+- status;
+- commits;
+- diff;
+- arquivos alterados;
+- commit messages;
+- base conhecida;
+- comparação relevante.
+
+Nunca executar:
+
+fetch
+pull
+checkout
+switch
+merge
+rebase
+reset
+stash
+
+Não presumir sempre master/develop.
+
+Usar informação do item/plano/branch.
+
+
+================================================================
+43. SCRIPT: new-item-workspace.ps1
+================================================================
+
+Entrada:
+
+-Id
+-Title
+-AzureUrl
+-ClaudePlanPath
+
+Funções:
+
+- gerar slug Windows-safe;
+- criar pasta;
+- criar arquivos pelos templates;
+- não sobrescrever silenciosamente item existente;
+- retornar caminho criado.
+
+Escrever somente dentro de dev-learning.
+
+
+================================================================
+44. SCRIPT: run-hook-tests.ps1
+================================================================
+
+Testar hooks com JSON simulado via stdin.
+
+Casos PERMITIDOS:
+
+git status
+
+git log -5
+
+git diff
+
+git show abc123
+
+az boards work-item show --id 123
+
+azure-sql -Query "SELECT TOP 10 * FROM AlgumaTabela"
+
+Get-Content C:\java_projects\projeto\arquivo.java
+
+Get-Content C:\Users\GabrielLima\.claude\CLAUDE.md
+
+
+Casos BLOQUEADOS:
+
+git push
+
+git commit -m "x"
+
+git pull
+
+git merge develop
+
+git reset --hard
+
+az boards work-item update --id 123 ...
+
+az pipelines run ...
+
+azure-sql -Query "UPDATE X SET Y = 1"
+
+azure-sql -Query "DELETE FROM X"
+
+Remove-Item C:\java_projects\projeto\arquivo.java
+
+Set-Content C:\Users\GabrielLima\.claude\CLAUDE.md "x"
+
+Copy-Item ... para caminho externo
+
+apply_patch externo
+
+
+Testar:
+
+- aspas;
+- case;
+- `;`;
+- PowerShell encadeado;
+- paths com espaços.
+
+Gerar:
+
+TEST
+EXPECTED
+OBSERVED
+PASS/FAIL
+
+
+================================================================
+45. SCRIPT: run-skill-evals.ps1
+================================================================
+
+Objetivo:
+
+executar ou preparar avaliações comportamentais.
+
+Se Codex instalado oferecer modo não-interativo adequado:
+usar.
+
+Se não:
+- validar JSONL;
+- gerar prompts;
+- armazenar resultado manual/semi-automático;
+- não inventar API.
+
+Saída:
+
+EVAL
+EXPECTED
+OBSERVED
+PASS/FAIL
+NOTES
+
+
+================================================================
+46. SCRIPT: validate-dev-learning.ps1
+================================================================
+
+Validar toda a instalação.
+
+ESTRUTURA
+
+[ ] AGENTS.md
+[ ] README.md
+[ ] exatamente 6 Skills principais
+[ ] SKILL.md em cada Skill
+[ ] frontmatter com name/description
+[ ] references presentes
+[ ] 3 subagentes
+[ ] scripts
+[ ] evals
+[ ] templates
+[ ] state
+
+
+ARQUITETURA V3
+
+[ ] investigate-item possui reconstruction-model
+[ ] possui claude-plan-analysis
+[ ] possui branch-analysis
+[ ] possui sql-understanding
+[ ] NÃO possui root-cause-gate obrigatório
+[ ] solution-mapper está presente
+[ ] system-mapper antigo não é usado
+
+
+COMPORTAMENTO
+
+[ ] plano vem antes do diff
+[ ] branch é analisada
+[ ] plano × implementação é comparado
+[ ] Skills MyCapital são opcionais
+[ ] SQL é opcional
+[ ] não há instrução para reproduzir BUG
+[ ] não há instrução para executar testes de validação
+[ ] não há instrução para iniciar endpoint para validar
+
+
+PEDAGOGIA
+
+[ ] active recall
+[ ] uma pergunta por vez
+[ ] resposta original preservada
+[ ] L1-L5
+[ ] PCRCV
+
+
+SEGURANÇA
+
+[ ] hooks JSON/TOML válidos
+[ ] PowerShell faz parse
+[ ] read-only externo
+[ ] nenhuma credencial óbvia
+[ ] hook tests passam
+
+
+EVALS
+
+[ ] trigger cases existem
+[ ] behavior cases existem
+[ ] hook cases existem
+
+Resultado:
+
+PASS
+FAIL
+WARNING
+
+
+================================================================
+47. TEMPLATES
+================================================================
+
+Criar templates pequenos e úteis.
+
+
+----------------------------------------------------------------
+47.1 item.md
+----------------------------------------------------------------
+
+# Item
+
+ID:
+
+Type:
+
+Title:
+
+URL:
+
+State:
+
+## Description
+
+## Acceptance Criteria
+
+## Context
+
+
+----------------------------------------------------------------
+47.2 reconstruction.md
+----------------------------------------------------------------
+
+# Reconstrução da solução
+
+## Problema
+
+## Comportamento esperado
+
+## O que o plano do Claude propôs
+
+## Causa/mecanismo descrito no plano
+
+## Estratégia escolhida
+
+## O que realmente mudou na branch
+
+## Plano × implementação
+
+### Igual ao planejado
+
+### Diferente do planejado
+
+### Alterações não mencionadas no plano
+
+### Planejado mas não localizado
+
+## Fluxo técnico
+
+## Regra de negócio
+
+## Skills MyCapital consultadas
+
+## SQL consultado
+
+Se não:
+
+"Não necessário."
+
+## Por que a alteração resolve
+
+## Dúvidas restantes
+
+## Status
+
+NOT_STARTED | COMPLETE | PARTIAL | UNKNOWN
+
+
+----------------------------------------------------------------
+47.3 evidence.md
+----------------------------------------------------------------
+
+# Evidências
+
+## CLAIM-001
+
+CLAIM:
+
+STATUS:
+
+SOURCE_TYPE:
+
+SOURCE:
+
+REFERENCE:
+
+NOTES:
+
+CONFLICTS:
+
+
+----------------------------------------------------------------
+47.4 business-rule.md
+----------------------------------------------------------------
+
+# Regra de negócio
+
+## Problema percebido
+
+## Comportamento esperado
+
+## Regra comprovada
+
+## Comportamento implementado
+
+## Regra financeira
+
+## Condições
+
+## Exceções
+
+## Dados importantes
+
+## Onde aparece no código
+
+## Origem da regra
+
+## Dúvidas
+
+
+----------------------------------------------------------------
+47.5 code-flow.md
+----------------------------------------------------------------
+
+# Fluxo do código
+
+## Entrada
+
+## Origem dos dados
+
+## Propagação
+
+## Classes e métodos
+
+## DAO / Query / Integração
+
+## Regra aplicada
+
+## Retorno
+
+## Conceitos técnicos aprendidos
+
+
+----------------------------------------------------------------
+47.6 my-understanding.md
+----------------------------------------------------------------
+
+# Meu entendimento
+
+## Entendimento inicial
+
+### Resposta original do usuário
+
+### Observações do Codex
+
+
+## Sessões
+
+### YYYY-MM-DD
+
+Pergunta:
+
+Resposta original:
+
+Avaliação:
+
+Próxima pergunta:
+
+
+Nunca substituir resposta original.
+
+
+----------------------------------------------------------------
+47.7 review.md
+----------------------------------------------------------------
+
+# Revisões
+
+## D0
+
+## D+1
+
+## D+3
+
+## D+7
+
+## D+14
+
+Para cada:
+
+Date:
+Questions:
+Original answers:
+Assessment:
+Pending topics:
+Next review:
+
+
+----------------------------------------------------------------
+47.8 planning.md
+----------------------------------------------------------------
+
+# Planning
+
+## P — Problema
+
+## C — Causa
+
+## R — Regra
+
+## C — Correção
+
+## V — Validação original
+
+## Versão de 30–60 segundos
+
+## Perguntas possíveis
+
+## Pontos para revisar
+
+
+================================================================
+48. EVALS
+================================================================
+
+Criar diretório:
+
+evals\
+
+
+----------------------------------------------------------------
+48.1 skill-trigger-cases.jsonl
+----------------------------------------------------------------
+
+Casos positivos e negativos.
+
+Exemplos:
+
+{"prompt":"quero começar a estudar o bug 123","expected_skill":"start-item"}
+
+{"prompt":"vamos iniciar o aprendizado de um PIB que finalizei","expected_skill":"start-item"}
+
+{"prompt":"quero entender como esse item foi resolvido","expected_skill":"investigate-item"}
+
+{"prompt":"me faça perguntas sobre o item","expected_skill":"learning-session"}
+
+{"prompt":"vamos revisar o bug da semana passada","expected_skill":"review-item"}
+
+{"prompt":"quero praticar a planning","expected_skill":"planning-review"}
+
+{"prompt":"vamos consolidar o que aprendi nesses bugs","expected_skill":"consolidate-knowledge"}
+
+{"prompt":"explique genericamente o que é Predicate em Java","expected_skill":null}
+
+
+----------------------------------------------------------------
+48.2 behavior-cases.jsonl
+----------------------------------------------------------------
+
+Criar casos de comportamento.
+
+START_ITEM:
+
+Expected:
+- pede plano;
+- pede link Azure;
+- cria workspace;
+- pergunta entendimento antes da explicação.
+
+INVESTIGATE_ITEM:
+
+Expected:
+- lê Azure;
+- lê plano antes do Git;
+- analisa branch;
+- compara plano × implementação;
+- lê código necessário;
+- Skills MyCapital apenas sob demanda;
+- SQL apenas sob demanda;
+- gera reconstruction.md;
+- não executa testes;
+- não reproduz BUG;
+- não chama endpoint;
+- não modifica código.
+
+LEARNING_SESSION:
+
+Expected:
+- uma pergunta;
+- usuário responde;
+- avalia;
+- próxima pergunta;
+- não mostra resposta antes.
+
+REVIEW_ITEM:
+
+Expected:
+- usa pergunta diferente;
+- registra revisão.
+
+PLANNING_REVIEW:
+
+Expected:
+- PCRCV;
+- usa validação histórica;
+- não executa nova validação.
+
+CONSOLIDATE:
+
+Expected:
+- só consolida conhecimento recorrente;
+- mantém origem.
+
+
+----------------------------------------------------------------
+48.3 hook-cases.jsonl
+----------------------------------------------------------------
+
+Registrar os casos definidos em run-hook-tests.
+
+
+================================================================
+49. README.md
+================================================================
+
+Criar README objetivo.
+
+Explicar:
+
+# DEV_LEARNING
+
+## Objetivo
+
+## Claude x Codex
+
+## Fluxo principal
+
+$start-item
+↓
+$investigate-item
+↓
+$learning-session
+↓
+$review-item
+↓
+$planning-review
+↓
+$consolidate-knowledge
+
+## Fontes
+
+- Azure;
+- Claude Plans;
+- Git;
+- Código;
+- Skills MyCapital;
+- SQL opcional.
+
+## Segurança
+
+## Estrutura
+
+## Como validar
+
+powershell -ExecutionPolicy Bypass -File .\scripts\validate-dev-learning.ps1
+
+powershell -ExecutionPolicy Bypass -File .\scripts\run-hook-tests.ps1
+
+powershell -ExecutionPolicy Bypass -File .\scripts\run-skill-evals.ps1
+
+## Como iniciar
+
+Usar:
+
+$start-item
+
+Não criar README excessivo.
+
+
+================================================================
+50. FLUXO COMPLETO DE UM ITEM
+================================================================
+
+PASSO 1 — START
+---------------
+
+Usuário:
+
+"iniciar novo item"
+
+Codex:
+
+1. qual plano?
+2. qual link Azure?
+3. cria workspace.
+4. pergunta:
+
+"Sem consultar nada, o que você lembra?"
+
+
+PASSO 2 — INVESTIGATE
+---------------------
+
+Codex:
+
+AZURE ITEM
+↓
+CLAUDE PLAN
+↓
+BRANCH
+↓
+CODE
+↓
+MYCAPITAL SKILLS se necessário
+↓
+SQL se necessário
+↓
+RECONSTRUCTION
+
+
+PASSO 3 — LEARNING
+------------------
+
+Codex muda de investigador para tutor.
+
+Pergunta:
+
+"Qual era o problema?"
+
+Usuário responde.
+
+Depois:
+
+"Qual foi a estratégia?"
+
+Depois:
+
+"Como isso virou código?"
+
+Depois:
+
+"Qual regra existe por trás?"
+
+Depois:
+
+"Por que isso resolve?"
+
+Sempre uma pergunta.
+
+
+PASSO 4 — REVIEW
+----------------
+
+D+1
+D+3
+D+7
+D+14
+
+
+PASSO 5 — PLANNING
+------------------
+
+Usuário explica sem consulta.
+
+Codex avalia:
+
+P
+C
+R
+C
+V
+
+
+PASSO 6 — CONSOLIDATION
+-----------------------
+
+Depois de vários itens:
+
+identificar padrões.
+
+Exemplos:
+
+- propagação de parâmetros;
+- regras temporais;
+- posição;
+- rentabilidade;
+- DAO → Query;
+- Open Finance;
+- comportamento de ativo sem cotação.
+
+Transformar em conhecimento recorrente.
+
+
+================================================================
+51. EXEMPLO DE COMPORTAMENTO ESPERADO
+================================================================
+
+Exemplo fictício baseado em um item real de rentabilidade.
+
+Azure:
+
+"Rentabilidade de Open Finance pode apresentar série anterior à implantação."
+
+Plano Claude:
+
+- trocar dataCriacaoConector por dataImplantacao;
+- propagar dataImplantacao;
+- remover cálculo antigo que deixou de ser necessário.
+
+Branch:
+
+- query passou a usar :dataImplantacao;
+- DAO passou a receber dataImplantacao;
+- métodos intermediários propagam o valor;
+- código antigo foi removido.
+
+Codex reconstrói:
+
+"O problema ocorria porque a data usada como limite da série podia recuar
+para antes da implantação. O plano escolheu usar a data de implantação como
+referência. Para isso, não bastava alterar a query: o valor precisava chegar
+até o DAO e ser usado no bind. A branch implementou essa propagação e removeu
+o cálculo anterior que ficou sem função."
+
+O Codex para de investigar.
+
+Não roda banco só para confirmar.
+
+Não executa testes.
+
+Não sobe endpoint.
+
+Depois pergunta:
+
+"Por que não bastava alterar somente o nome do parâmetro na query?"
+
+Esse é o comportamento correto.
+
+
+================================================================
+52. TESTES OBRIGATÓRIOS
+================================================================
+
+Antes de declarar pronto:
+
+1. validar estrutura;
+2. validar TOML;
+3. validar JSON;
+4. validar PowerShell;
+5. rodar hook tests;
+6. rodar evals possíveis;
+7. confirmar que os workflows não contêm revalidação;
+8. confirmar que escrita externa está bloqueada;
+9. confirmar que escrita no dev-learning continua funcionando.
+
+Não afirmar "PASS" sem teste.
+
+
+================================================================
+53. CRITÉRIOS DE ACEITE V3
+================================================================
+
+A V3 está pronta somente se:
+
+[ ] projeto pode ser aberto no VS Code;
+[ ] AGENTS.md existe;
+[ ] existem exatamente 6 Skills principais;
+[ ] start-item funciona;
+[ ] item Azure é consultado read-only;
+[ ] plano Claude é selecionado;
+[ ] entendimento inicial é coletado antes do ensino;
+[ ] investigate-item lê plano antes da branch;
+[ ] branch é analisada read-only;
+[ ] plano × implementação é comparado;
+[ ] código é lido apenas no escopo necessário;
+[ ] reconstruction.md é gerado;
+[ ] evidence.md usa claims leves;
+[ ] business-rule.md é gerado;
+[ ] code-flow.md é gerado;
+[ ] Skills MyCapital são carregadas sob demanda;
+[ ] SQL é opcional;
+[ ] CLAUDE.md é lido antes de SQL;
+[ ] SQL é read-only;
+[ ] nenhum segredo é armazenado;
+[ ] nenhum teste é executado para revalidar;
+[ ] BUG não é reproduzido;
+[ ] endpoint não é iniciado para validação;
+[ ] learning-session usa uma pergunta por vez;
+[ ] resposta original é preservada;
+[ ] níveis L1-L5 existem;
+[ ] review-item existe;
+[ ] planning-review usa PCRCV;
+[ ] consolidate-knowledge existe;
+[ ] evidence-explorer é read-only;
+[ ] solution-mapper é read-only;
+[ ] learning-assessor é read-only;
+[ ] SessionStart funciona;
+[ ] PreToolUse bloqueia mutações;
+[ ] escrita legítima dentro de dev-learning funciona;
+[ ] evals existem;
+[ ] run-hook-tests passa;
+[ ] validator retorna PASS na instalação correta.
+
+
+================================================================
+54. MIGRAÇÃO DE VERSÕES ANTERIORES
+================================================================
+
+Se V1 ou V2 já existirem:
+
+PRESERVAR:
+
+items\
+knowledge\
+reviews\
+.state\
+
+Preservar respostas do usuário.
+
+Migrar:
+
+mycapital-architecture Skill
+→ investigate-item\references\mycapital-architecture.md
+
+business-rule Skill
+→ investigate-item\references\business-rule.md
+
+code-flow Skill
+→ investigate-item\references\code-flow.md
+
+sql-investigation Skill
+→ investigate-item\references\sql-understanding.md
+
+system-mapper
+→ solution-mapper
+
+
+Remover como conceito obrigatório:
+
+root-cause-gate
+
+Não é necessário revalidar causa raiz.
+
+Criar:
+
+reconstruction-model.md
+claude-plan-analysis.md
+branch-analysis.md
+
+Atualizar:
+
+investigate-item
+evals
+validator
+README
+AGENTS.md
+
+Somente remover arquivos antigos depois de confirmar que conteúdo útil foi migrado.
+
+
+================================================================
+55. NÃO IMPLEMENTAR NA V3
+================================================================
+
+Não criar:
+
+- dashboard web;
+- SQLite;
+- PostgreSQL do próprio projeto;
+- embeddings;
+- vector database;
+- RAG;
+- aplicação desktop;
+- automação de calendário;
+- scheduler;
+- background jobs;
+- UI própria;
+- MCP customizado;
+- learning-retro;
+- sincronização cloud;
+- sistema de pontuação complexo.
+
+Manter simples.
+
+
+================================================================
+56. MELHORIA FUTURA — LEARNING RETRO
+================================================================
+
+Não implementar agora.
+
+Apenas registrar como ideia futura.
+
+Depois de 5–10 itens, poderá analisar:
+
+- quais perguntas mais ajudam;
+- onde usuário erra repetidamente;
+- onde Codex explica cedo demais;
+- quais referências quase nunca são úteis;
+- quais padrões aparecem em vários itens;
+- quais evals faltam;
+- quais Skills consomem contexto sem retorno.
+
+Só implementar depois de existir histórico real.
+
+
+================================================================
+57. EXECUÇÃO DA TAREFA
+================================================================
+
+Execute em etapas.
+
+
+ETAPA 1 — INSPEÇÃO
+
+Inspecionar:
+
+C:\Users\GabrielLima\dev-learning
+
+Se existir:
+entender estado atual.
+
+
+ETAPA 2 — PRESERVAÇÃO
+
+Preservar:
+
+items
+knowledge
+reviews
+.state
+
+Não copiar segredos.
+
+
+ETAPA 3 — ESTRUTURA
+
+Criar/ajustar diretórios.
+
+
+ETAPA 4 — AGENTS E CONFIG
+
+Criar:
+
+AGENTS.md
+config.toml
+subagentes
+
+
+ETAPA 5 — SKILLS
+
+Criar as 6 Skills.
+
+
+ETAPA 6 — REFERENCES
+
+Criar todas as referências.
+
+
+ETAPA 7 — SCRIPTS
+
+Criar scripts PowerShell.
+
+
+ETAPA 8 — HOOKS
+
+Criar hooks.
+
+
+ETAPA 9 — TEMPLATES
+
+Criar templates.
+
+
+ETAPA 10 — EVALS
+
+Criar eval definitions e runners.
+
+
+ETAPA 11 — VALIDATION
+
+Executar:
+
+validate-dev-learning.ps1
+
+run-hook-tests.ps1
+
+run-skill-evals.ps1 quando possível.
+
+
+ETAPA 12 — CORREÇÃO
+
+Corrigir FAILs encontrados.
+
+
+================================================================
+58. RESULTADO A APRESENTAR AO FINAL
+================================================================
+
+Ao terminar, responder com:
+
+1. árvore final do projeto;
+
+2. Skills criadas;
+
+3. referências criadas;
+
+4. subagentes criados;
+
+5. hooks criados;
+
+6. scripts criados;
+
+7. templates criados;
+
+8. evals criados;
+
+9. testes executados;
+
+10. PASS/FAIL;
+
+11. limitações reais;
+
+12. se houve migração:
+    - o que foi preservado;
+    - o que foi alterado;
+    - o que foi removido;
+
+13. comando/ação exata para iniciar:
+
+$start-item
+
+Não responder apenas com explicação teórica.
+
+IMPLEMENTAR.
+
+
+================================================================
+59. DEFINIÇÃO FINAL DO PRODUTO
+================================================================
+
+O DEV_LEARNING não é:
+
+"um conjunto de prompts que cria resumos."
+
+Ele é:
+
+"um sistema pessoal de reconstrução de solução + aprendizagem ativa +
+revisão, usando o trabalho real do desenvolvedor como material de estudo."
+
+
+Fluxo final:
+
+AZURE DEVOPS
+↓
+CLAUDE PLAN
+↓
+BRANCH / GIT
+↓
+CÓDIGO
+↓
+SKILLS MYCAPITAL, SE NECESSÁRIO
+↓
+SQL, SE NECESSÁRIO
+↓
+RECONSTRUCTION
+↓
+ACTIVE RECALL
+↓
+REVIEW
+↓
+PLANNING
+↓
+CONSOLIDATED KNOWLEDGE
+
+
+Pergunta central do projeto:
+
+"Você consegue explicar, sem ajuda, como esse problema foi resolvido
+e por que a solução funciona?"
+
+
+FIM DO PROMPT-MESTRE COMPLETO V3

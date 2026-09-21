@@ -1,0 +1,18 @@
+# Evidências
+
+## CLAIM-001
+
+CLAIM:
+
+STATUS:
+
+SOURCE_TYPE:
+
+SOURCE:
+
+REFERENCE:
+
+NOTES:
+
+CONFLICTS:
+

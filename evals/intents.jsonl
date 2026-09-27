@@ -1,0 +1,5 @@
+{"id":"start","prompt":"vamos começar meu aprendizado de Java","skill":"java-learning","expected_action":"TEACH"}
+{"id":"continue","prompt":"vamos continuar o aprendizado","skill":"java-learning","expected_action":"state-dependent"}
+{"id":"finish","prompt":"terminei o exercício","skill":"java-learning","expected_action":"REVIEWING"}
+{"id":"summary","prompt":"resumo da última aula","skill":"java-learning","expected_action":"SUMMARY"}
+{"id":"revision","prompt":"quero revisar Collections","skill":"java-learning","expected_action":"REVISION"}

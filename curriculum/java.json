@@ -1,0 +1,828 @@
+{
+  "track": "java",
+  "version": 2,
+  "languageLevel": 25,
+  "scope": "Java e backend como eixo principal, com arquitetura, microsserviços, QA, frontend e infraestrutura complementares.",
+  "sourceDocuments": [
+    "java_arquitetura_ms-main/resumo_geral_linguagem_java.md",
+    "java_arquitetura_ms-main/resumo_arquitetura_java_microsservicos.md"
+  ],
+  "modules": [
+    {"id": "fundamentals", "title": "Fundamentos", "result": "Resolver problemas simples e explicar a execução de um programa Java."},
+    {"id": "code-structure", "title": "Estrutura do código", "result": "Organizar comportamento em métodos, classes e packages."},
+    {"id": "oop", "title": "Orientação a Objetos", "result": "Modelar domínio com responsabilidades, identidade e contratos."},
+    {"id": "java-apis", "title": "APIs essenciais", "result": "Manipular dados com os principais tipos e APIs da plataforma."},
+    {"id": "functional-modern", "title": "Java funcional e moderno", "result": "Transformar dados com recursos modernos e código idiomático."},
+    {"id": "concurrency", "title": "Concorrência", "result": "Executar trabalho concorrente com segurança e critérios claros."},
+    {"id": "data-access", "title": "SQL e acesso a dados", "result": "Implementar persistência relacional segura, transacional e testável."},
+    {"id": "engineering", "title": "Engenharia de software", "result": "Produzir código sustentável, testável e bem organizado."},
+    {"id": "backend-core", "title": "Backend com Quarkus", "result": "Construir uma API com contratos e responsabilidades bem separados."},
+    {"id": "orm-persistence", "title": "Persistência com ORM", "result": "Persistir o domínio com JPA e Hibernate sem misturar infraestrutura e regras."},
+    {"id": "distributed-systems", "title": "Microsserviços e processamento assíncrono", "result": "Integrar serviços por fluxos síncronos e assíncronos resilientes."},
+    {"id": "security-observability", "title": "Segurança e observabilidade", "result": "Proteger e operar uma aplicação observável."},
+    {"id": "quality-delivery", "title": "Testes e entrega", "result": "Validar, empacotar e entregar o backend de forma reproduzível."},
+    {"id": "web-qa-integration", "title": "Integração web e QA", "result": "Colaborar com frontend e QA compreendendo contratos, camadas e testes."},
+    {"id": "final-project", "title": "Projeto final", "result": "Integrar os conceitos em um microsserviço completo."}
+  ],
+  "lessons": [
+    {
+      "id": "initial-diagnostic",
+      "module": "fundamentals",
+      "title": "Diagnóstico inicial",
+      "kind": "diagnostic",
+      "objective": "Resolver pequenos desafios de variáveis, decisões, repetição e métodos para definir o ponto inicial sem pular fundamentos essenciais.",
+      "prerequisites": []
+    },
+    {
+      "id": "variables-types",
+      "module": "fundamentals",
+      "title": "Variáveis, tipos, conversões e wrappers",
+      "kind": "lesson",
+      "objective": "Declarar dados com tipos primitivos e de referência, constantes, var, casts e wrappers adequados.",
+      "prerequisites": ["initial-diagnostic"]
+    },
+    {
+      "id": "operators",
+      "module": "fundamentals",
+      "title": "Operadores",
+      "kind": "lesson",
+      "objective": "Combinar operadores aritméticos, relacionais, lógicos e ternários em expressões corretas.",
+      "prerequisites": ["variables-types"]
+    },
+    {
+      "id": "input-output",
+      "module": "fundamentals",
+      "title": "Entrada e saída",
+      "kind": "lesson",
+      "objective": "Ler valores, converter entradas e apresentar resultados com tratamento básico de tipos.",
+      "prerequisites": ["operators"]
+    },
+    {
+      "id": "java-platform-structure",
+      "module": "fundamentals",
+      "title": "Java, JDK, JRE, JVM e estrutura básica",
+      "kind": "lesson",
+      "objective": "Compilar e executar uma classe com main, distinguindo linguagem, JDK, JRE, JVM e bytecode.",
+      "prerequisites": ["input-output"]
+    },
+    {
+      "id": "conditionals",
+      "module": "fundamentals",
+      "title": "Condicionais e switch expression",
+      "kind": "lesson",
+      "objective": "Escolher caminhos de execução com if/else e switch expression de forma coerente.",
+      "prerequisites": ["java-platform-structure"]
+    },
+    {
+      "id": "loops",
+      "module": "fundamentals",
+      "title": "Loops",
+      "kind": "lesson",
+      "objective": "Usar for, for-each, while e do-while com parada correta e uso consciente de break e continue.",
+      "prerequisites": ["conditionals"]
+    },
+    {
+      "id": "arrays-matrices",
+      "module": "fundamentals",
+      "title": "Arrays e matrizes",
+      "kind": "lesson",
+      "objective": "Armazenar e percorrer conjuntos de tamanho fixo em uma ou mais dimensões.",
+      "prerequisites": ["loops"]
+    },
+    {
+      "id": "strings",
+      "module": "fundamentals",
+      "title": "Strings",
+      "kind": "lesson",
+      "objective": "Comparar, formatar e construir textos usando String, text blocks e StringBuilder.",
+      "prerequisites": ["arrays-matrices"]
+    },
+    {
+      "id": "checkpoint-fundamentals",
+      "module": "fundamentals",
+      "title": "Checkpoint de fundamentos",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Combinar tipos, expressões, decisões, repetição, arrays e textos em um desafio menos guiado.",
+      "prerequisites": ["strings"]
+    },
+    {
+      "id": "methods",
+      "module": "code-structure",
+      "title": "Métodos, parâmetros e retorno",
+      "kind": "lesson",
+      "objective": "Extrair comportamentos para métodos com parâmetros e retornos coerentes.",
+      "prerequisites": ["checkpoint-fundamentals"]
+    },
+    {
+      "id": "method-overloading-varargs",
+      "module": "code-structure",
+      "title": "Sobrecarga e varargs",
+      "kind": "lesson",
+      "objective": "Aplicar sobrecarga e argumentos variáveis somente quando melhorarem a API de um método.",
+      "prerequisites": ["methods"]
+    },
+    {
+      "id": "scope",
+      "module": "code-structure",
+      "title": "Escopo",
+      "kind": "lesson",
+      "objective": "Controlar a visibilidade e o tempo de vida de variáveis sem estado desnecessário.",
+      "prerequisites": ["method-overloading-varargs"]
+    },
+    {
+      "id": "classes-objects",
+      "module": "code-structure",
+      "title": "Classes e objetos",
+      "kind": "lesson",
+      "objective": "Representar um conceito simples com estado e comportamento em uma classe.",
+      "prerequisites": ["scope"]
+    },
+    {
+      "id": "constructors-static",
+      "module": "code-structure",
+      "title": "Construtores e membros static",
+      "kind": "lesson",
+      "objective": "Criar objetos em estado válido e distinguir membros da instância de membros da classe.",
+      "prerequisites": ["classes-objects"]
+    },
+    {
+      "id": "packages-naming",
+      "module": "code-structure",
+      "title": "Packages e convenções de nomes",
+      "kind": "lesson",
+      "objective": "Organizar tipos em packages e aplicar convenções de nomes para classes, métodos, variáveis e constantes.",
+      "prerequisites": ["constructors-static"]
+    },
+    {
+      "id": "checkpoint-code-structure",
+      "module": "code-structure",
+      "title": "Checkpoint de estrutura do código",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Organizar uma solução pequena em packages, objetos e métodos colaborativos.",
+      "prerequisites": ["packages-naming"]
+    },
+    {
+      "id": "encapsulation",
+      "module": "oop",
+      "title": "Encapsulamento",
+      "kind": "lesson",
+      "objective": "Proteger invariantes e expor operações em vez de estado mutável irrestrito.",
+      "prerequisites": ["checkpoint-code-structure"]
+    },
+    {
+      "id": "inheritance-polymorphism",
+      "module": "oop",
+      "title": "Herança e polimorfismo",
+      "kind": "lesson",
+      "objective": "Usar herança, super e substituição polimórfica quando os tipos compartilham um contrato real.",
+      "prerequisites": ["encapsulation"]
+    },
+    {
+      "id": "composition",
+      "module": "oop",
+      "title": "Composição",
+      "kind": "lesson",
+      "objective": "Combinar objetos por composição para distribuir responsabilidades sem acoplamento hierárquico desnecessário.",
+      "prerequisites": ["inheritance-polymorphism"]
+    },
+    {
+      "id": "abstraction-interfaces",
+      "module": "oop",
+      "title": "Interfaces e classes abstratas",
+      "kind": "lesson",
+      "objective": "Definir contratos pequenos e separar o que um componente faz de como ele faz.",
+      "prerequisites": ["composition"]
+    },
+    {
+      "id": "equality-hashing",
+      "module": "oop",
+      "title": "equals e hashCode",
+      "kind": "lesson",
+      "objective": "Definir igualdade lógica consistente e compreender seu impacto em coleções baseadas em hash.",
+      "prerequisites": ["abstraction-interfaces"]
+    },
+    {
+      "id": "checkpoint-oop",
+      "module": "oop",
+      "title": "Checkpoint de orientação a objetos",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Modelar um domínio com invariantes, composição, identidade, responsabilidades e contratos explícitos.",
+      "prerequisites": ["equality-hashing"]
+    },
+    {
+      "id": "collections",
+      "module": "java-apis",
+      "title": "Collections",
+      "kind": "lesson",
+      "objective": "Escolher e usar List, Set, Map, Queue e Deque, incluindo coleções imutáveis.",
+      "prerequisites": ["checkpoint-oop"]
+    },
+    {
+      "id": "ordering-comparison",
+      "module": "java-apis",
+      "title": "Comparable e Comparator",
+      "kind": "lesson",
+      "objective": "Definir ordenação natural e ordenações alternativas sem misturar critérios.",
+      "prerequisites": ["collections"]
+    },
+    {
+      "id": "generics",
+      "module": "java-apis",
+      "title": "Generics",
+      "kind": "lesson",
+      "objective": "Criar APIs reutilizáveis com segurança de tipos, limites e wildcards.",
+      "prerequisites": ["ordering-comparison"]
+    },
+    {
+      "id": "enums-records-sealed",
+      "module": "java-apis",
+      "title": "Enum, Record e classes seladas",
+      "kind": "lesson",
+      "objective": "Modelar conjuntos finitos, dados imutáveis e hierarquias fechadas com tipos expressivos.",
+      "prerequisites": ["generics"]
+    },
+    {
+      "id": "exceptions",
+      "module": "java-apis",
+      "title": "Exceptions",
+      "kind": "lesson",
+      "objective": "Criar, sinalizar e tratar falhas com checked e unchecked exceptions, try-with-resources e exceções próprias.",
+      "prerequisites": ["enums-records-sealed"]
+    },
+    {
+      "id": "optional",
+      "module": "java-apis",
+      "title": "Optional",
+      "kind": "lesson",
+      "objective": "Representar ausência em retornos e escolher conscientemente entre map, orElse, orElseGet e orElseThrow.",
+      "prerequisites": ["exceptions"]
+    },
+    {
+      "id": "bigdecimal",
+      "module": "java-apis",
+      "title": "BigDecimal",
+      "kind": "lesson",
+      "objective": "Calcular e comparar valores decimais com precisão e arredondamento explícitos.",
+      "prerequisites": ["optional"]
+    },
+    {
+      "id": "date-time",
+      "module": "java-apis",
+      "title": "Datas e horários",
+      "kind": "lesson",
+      "objective": "Representar, formatar e calcular datas e horários locais, instantes e fusos com java.time.",
+      "prerequisites": ["bigdecimal"]
+    },
+    {
+      "id": "files-io",
+      "module": "java-apis",
+      "title": "Arquivos e I/O",
+      "kind": "lesson",
+      "objective": "Ler e escrever arquivos inteiros ou em fluxo, fechando recursos corretamente.",
+      "prerequisites": ["date-time"]
+    },
+    {
+      "id": "annotations-reflection",
+      "module": "java-apis",
+      "title": "Annotations e reflexão",
+      "kind": "lesson",
+      "objective": "Criar metadados com annotations e inspecioná-los por reflexão, reconhecendo o papel de annotation processors.",
+      "prerequisites": ["files-io"]
+    },
+    {
+      "id": "checkpoint-java-apis",
+      "module": "java-apis",
+      "title": "Checkpoint de APIs essenciais",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Implementar uma funcionalidade de domínio usando tipos, coleções, erros e I/O adequados.",
+      "prerequisites": ["annotations-reflection"]
+    },
+    {
+      "id": "lambdas-functional-interfaces",
+      "module": "functional-modern",
+      "title": "Lambdas e interfaces funcionais",
+      "kind": "lesson",
+      "objective": "Usar lambdas com Predicate, Function, Consumer e Supplier sem ocultar regras importantes.",
+      "prerequisites": ["checkpoint-java-apis"]
+    },
+    {
+      "id": "streams",
+      "module": "functional-modern",
+      "title": "Streams API",
+      "kind": "lesson",
+      "objective": "Filtrar, transformar, ordenar, limitar, localizar, reduzir, agrupar e achatar dados em pipelines legíveis.",
+      "prerequisites": ["lambdas-functional-interfaces"]
+    },
+    {
+      "id": "modern-language-features",
+      "module": "functional-modern",
+      "title": "Recursos modernos da linguagem",
+      "kind": "lesson",
+      "objective": "Aplicar pattern matching, record patterns, switch expressions e text blocks onde simplificarem o código.",
+      "prerequisites": ["streams"]
+    },
+    {
+      "id": "immutability-functional-design",
+      "module": "functional-modern",
+      "title": "Imutabilidade e desenho funcional",
+      "kind": "lesson",
+      "objective": "Reduzir efeitos colaterais e modelar transformações previsíveis com dados imutáveis.",
+      "prerequisites": ["modern-language-features"]
+    },
+    {
+      "id": "checkpoint-functional-modern",
+      "module": "functional-modern",
+      "title": "Checkpoint de Java funcional e moderno",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Processar um conjunto de dados de domínio com APIs funcionais e recursos modernos justificáveis.",
+      "prerequisites": ["immutability-functional-design"]
+    },
+    {
+      "id": "threads-executors",
+      "module": "concurrency",
+      "title": "Threads e ExecutorService",
+      "kind": "lesson",
+      "objective": "Executar tarefas em threads e gerenciar sua execução com pools e encerramento correto.",
+      "prerequisites": ["checkpoint-functional-modern"]
+    },
+    {
+      "id": "futures-async",
+      "module": "concurrency",
+      "title": "Callable, Future e CompletableFuture",
+      "kind": "lesson",
+      "objective": "Obter resultados e compor etapas assíncronas com tratamento explícito de falhas.",
+      "prerequisites": ["threads-executors"]
+    },
+    {
+      "id": "concurrency-safety",
+      "module": "concurrency",
+      "title": "Sincronização e estruturas concorrentes",
+      "kind": "lesson",
+      "objective": "Proteger estado compartilhado com sincronização, tipos atômicos e coleções concorrentes adequadas.",
+      "prerequisites": ["futures-async"]
+    },
+    {
+      "id": "virtual-threads",
+      "module": "concurrency",
+      "title": "Virtual Threads",
+      "kind": "lesson",
+      "objective": "Usar virtual threads em tarefas bloqueantes e reconhecer quando elas não resolvem contenção ou CPU intensiva.",
+      "prerequisites": ["concurrency-safety"]
+    },
+    {
+      "id": "checkpoint-concurrency",
+      "module": "concurrency",
+      "title": "Checkpoint de concorrência",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Implementar processamento concorrente previsível, encerrável e sem corrupção de estado.",
+      "prerequisites": ["virtual-threads"]
+    },
+    {
+      "id": "relational-sql-basics",
+      "module": "data-access",
+      "title": "Modelo relacional e SQL",
+      "kind": "lesson",
+      "objective": "Modelar tabelas, chaves, constraints, índices e consultas com filtros, aliases e joins.",
+      "prerequisites": ["checkpoint-concurrency"]
+    },
+    {
+      "id": "jdbc-connections",
+      "module": "data-access",
+      "title": "JDBC, drivers e conexões",
+      "kind": "lesson",
+      "objective": "Conectar ao banco com driver, URL, DriverManager ou DataSource e explicar o papel do pool.",
+      "prerequisites": ["relational-sql-basics"]
+    },
+    {
+      "id": "jdbc-statements-mapping",
+      "module": "data-access",
+      "title": "Statements, parâmetros e mapeamento",
+      "kind": "lesson",
+      "objective": "Executar comandos com PreparedStatement, mapear ResultSet e tratar tipos e valores nulos sem SQL injection.",
+      "prerequisites": ["jdbc-connections"]
+    },
+    {
+      "id": "jdbc-crud-dao",
+      "module": "data-access",
+      "title": "CRUD, DAO e Repository com JDBC",
+      "kind": "lesson",
+      "objective": "Implementar insert, chaves geradas, select, update e delete atrás de um limite de persistência testável.",
+      "prerequisites": ["jdbc-statements-mapping"]
+    },
+    {
+      "id": "jdbc-transactions",
+      "module": "data-access",
+      "title": "Transações, savepoints e isolamento",
+      "kind": "lesson",
+      "objective": "Controlar commit, rollback, auto-commit, savepoints e níveis de isolamento conforme a consistência necessária.",
+      "prerequisites": ["jdbc-crud-dao"]
+    },
+    {
+      "id": "jdbc-advanced-operations",
+      "module": "data-access",
+      "title": "Batch, paginação e recursos avançados",
+      "kind": "lesson",
+      "objective": "Aplicar batch, paginação, limites, timeouts, metadados, procedures, functions, triggers, BLOBs e consultas dinâmicas com critérios explícitos.",
+      "prerequisites": ["jdbc-transactions"]
+    },
+    {
+      "id": "database-migrations-test-data",
+      "module": "data-access",
+      "title": "Migrations, massa e testes de integração",
+      "kind": "lesson",
+      "objective": "Versionar schema com Flyway ou Liquibase, gerar dados com Datafaker e testar repositories contra banco controlado.",
+      "prerequisites": ["jdbc-advanced-operations"]
+    },
+    {
+      "id": "checkpoint-data-access",
+      "module": "data-access",
+      "title": "Checkpoint de SQL e acesso a dados",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Entregar um repository JDBC seguro, transacional, paginado e coberto por teste de integração.",
+      "prerequisites": ["database-migrations-test-data"]
+    },
+    {
+      "id": "maven-gradle",
+      "module": "engineering",
+      "title": "Maven e Gradle",
+      "kind": "lesson",
+      "objective": "Gerenciar dependências, ciclo de build, plugins e estrutura de projeto com Maven e reconhecer o equivalente em Gradle.",
+      "prerequisites": ["checkpoint-data-access"]
+    },
+    {
+      "id": "junit",
+      "module": "engineering",
+      "title": "Testes com JUnit",
+      "kind": "lesson",
+      "objective": "Escrever testes unitários legíveis, determinísticos e capazes de verificar resultados e exceções.",
+      "prerequisites": ["maven-gradle"]
+    },
+    {
+      "id": "mockito-test-doubles",
+      "module": "engineering",
+      "title": "Mockito e test doubles",
+      "kind": "lesson",
+      "objective": "Isolar uma unidade somente quando uma colaboração externa justificar mocks, stubs ou fakes.",
+      "prerequisites": ["junit"]
+    },
+    {
+      "id": "clean-code-refactoring",
+      "module": "engineering",
+      "title": "Clean Code e refatoração",
+      "kind": "lesson",
+      "objective": "Melhorar nomes, tamanho de métodos, constantes, fluxo, imutabilidade e APIs sem alterar comportamento.",
+      "prerequisites": ["mockito-test-doubles"]
+    },
+    {
+      "id": "solid",
+      "module": "engineering",
+      "title": "SOLID",
+      "kind": "lesson",
+      "objective": "Aplicar SRP, OCP, LSP, ISP e DIP em problemas concretos sem criar abstrações especulativas.",
+      "prerequisites": ["clean-code-refactoring"]
+    },
+    {
+      "id": "logging",
+      "module": "engineering",
+      "title": "Logging",
+      "kind": "lesson",
+      "objective": "Registrar eventos úteis com nível, contexto e cuidado para não expor dados sensíveis.",
+      "prerequisites": ["solid"]
+    },
+    {
+      "id": "feature-organization-workflow",
+      "module": "engineering",
+      "title": "Organização por funcionalidade e trabalho seguro",
+      "kind": "lesson",
+      "objective": "Organizar código que muda junto e executar investigação, mudanças de escopo e verificações com evidências honestas.",
+      "prerequisites": ["logging"]
+    },
+    {
+      "id": "checkpoint-engineering",
+      "module": "engineering",
+      "title": "Checkpoint de engenharia",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Entregar um componente testável, observável, organizado por funcionalidade e com responsabilidades claras.",
+      "prerequisites": ["feature-organization-workflow"]
+    },
+    {
+      "id": "web-http-rest",
+      "module": "backend-core",
+      "title": "Aplicações web, HTTP e REST",
+      "kind": "lesson",
+      "objective": "Explicar o fluxo frontend-backend-dados e modelar recursos, operações, status e respostas com semântica HTTP.",
+      "prerequisites": ["checkpoint-engineering"]
+    },
+    {
+      "id": "quarkus-jakarta",
+      "module": "backend-core",
+      "title": "Quarkus e Jakarta EE",
+      "kind": "lesson",
+      "objective": "Criar e executar uma aplicação Quarkus usando APIs jakarta e compreender seu modo de desenvolvimento.",
+      "prerequisites": ["web-http-rest"]
+    },
+    {
+      "id": "multi-module-architecture",
+      "module": "backend-core",
+      "title": "Arquitetura Maven multi-módulo",
+      "kind": "lesson",
+      "objective": "Separar contratos, clientes e serviço em módulos com dependências direcionadas e limites claros.",
+      "prerequisites": ["quarkus-jakarta"]
+    },
+    {
+      "id": "jaxrs-endpoints",
+      "module": "backend-core",
+      "title": "APIs REST com JAX-RS",
+      "kind": "lesson",
+      "objective": "Implementar endpoints finos com rotas, métodos, parâmetros, mídia e status HTTP adequados.",
+      "prerequisites": ["multi-module-architecture"]
+    },
+    {
+      "id": "json-dto-contracts",
+      "module": "backend-core",
+      "title": "JSON, DTOs e contratos por operação",
+      "kind": "lesson",
+      "objective": "Definir entradas e saídas específicas sem expor entidades nem regras internas pela API.",
+      "prerequisites": ["jaxrs-endpoints"]
+    },
+    {
+      "id": "cdi-config-validation",
+      "module": "backend-core",
+      "title": "CDI, configuração, perfis e validação",
+      "kind": "lesson",
+      "objective": "Injetar dependências e configurações, aplicar precedência e defaults e validar dados na fronteira correta.",
+      "prerequisites": ["json-dto-contracts"]
+    },
+    {
+      "id": "service-mapper-error-handling",
+      "module": "backend-core",
+      "title": "Services, mappers e tratamento de erros",
+      "kind": "lesson",
+      "objective": "Coordenar casos de uso em services, converter modelos em factories ou mappers e padronizar erros centralmente.",
+      "prerequisites": ["cdi-config-validation"]
+    },
+    {
+      "id": "checkpoint-backend-core",
+      "module": "backend-core",
+      "title": "Checkpoint de backend com Quarkus",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Entregar uma API Quarkus com endpoint fino, contrato próprio, validação, serviço e erros padronizados.",
+      "prerequisites": ["service-mapper-error-handling"]
+    },
+    {
+      "id": "jpa-hibernate-entities",
+      "module": "orm-persistence",
+      "title": "JPA, Hibernate e entidades",
+      "kind": "lesson",
+      "objective": "Mapear entidades, campos, datas, booleanos, enums e relacionamentos preservando o modelo de domínio.",
+      "prerequisites": ["checkpoint-backend-core"]
+    },
+    {
+      "id": "orm-identifiers-constraints",
+      "module": "orm-persistence",
+      "title": "Identificadores, constraints e conflitos",
+      "kind": "lesson",
+      "objective": "Escolher estratégias de identificador e converter violações de constraints em respostas de negócio adequadas.",
+      "prerequisites": ["jpa-hibernate-entities"]
+    },
+    {
+      "id": "orm-repositories-queries",
+      "module": "orm-persistence",
+      "title": "Repositories e queries",
+      "kind": "lesson",
+      "objective": "Consultar com EntityManager, JPQL, SQL nativo e named queries, separando consultas complexas quando necessário.",
+      "prerequisites": ["orm-identifiers-constraints"]
+    },
+    {
+      "id": "orm-transactions-datasources",
+      "module": "orm-persistence",
+      "title": "Transações e datasources",
+      "kind": "lesson",
+      "objective": "Delimitar transações e configurar Agroal, H2, banco real, geração de schema e múltiplos datasources.",
+      "prerequisites": ["orm-repositories-queries"]
+    },
+    {
+      "id": "checkpoint-orm-persistence",
+      "module": "orm-persistence",
+      "title": "Checkpoint de persistência com ORM",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Persistir uma fatia de domínio com JPA, constraints, transações, consultas e banco de teste.",
+      "prerequisites": ["orm-transactions-datasources"]
+    },
+    {
+      "id": "service-http-clients",
+      "module": "distributed-systems",
+      "title": "Clientes HTTP entre serviços",
+      "kind": "lesson",
+      "objective": "Consumir outro serviço por contrato explícito, configuração externa e propagação controlada de identidade.",
+      "prerequisites": ["checkpoint-orm-persistence"]
+    },
+    {
+      "id": "resilience-idempotency",
+      "module": "distributed-systems",
+      "title": "Timeout, retry, resiliência e idempotência",
+      "kind": "lesson",
+      "objective": "Configurar limites e repetição sem amplificar falhas nem duplicar efeitos de negócio.",
+      "prerequisites": ["service-http-clients"]
+    },
+    {
+      "id": "kafka-messaging",
+      "module": "distributed-systems",
+      "title": "Kafka e mensageria",
+      "kind": "lesson",
+      "objective": "Publicar e consumir eventos com SmallRye Reactive Messaging, tratando contrato, falha e reprocessamento.",
+      "prerequisites": ["resilience-idempotency"]
+    },
+    {
+      "id": "redis-cache",
+      "module": "distributed-systems",
+      "title": "Redis e cache",
+      "kind": "lesson",
+      "objective": "Usar cache e estado temporário com política de chave, expiração, invalidação e consistência explícitas.",
+      "prerequisites": ["kafka-messaging"]
+    },
+    {
+      "id": "jobs-in-memory-queues",
+      "module": "distributed-systems",
+      "title": "Jobs e filas em memória",
+      "kind": "lesson",
+      "objective": "Agendar trabalho e avaliar quando uma fila local é suficiente ou exige infraestrutura durável.",
+      "prerequisites": ["redis-cache"]
+    },
+    {
+      "id": "checkpoint-distributed-systems",
+      "module": "distributed-systems",
+      "title": "Checkpoint de microsserviços",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Implementar um fluxo distribuído com contrato, resiliência, idempotência e processamento assíncrono verificáveis.",
+      "prerequisites": ["jobs-in-memory-queues"]
+    },
+    {
+      "id": "backend-security",
+      "module": "security-observability",
+      "title": "Segurança no backend",
+      "kind": "lesson",
+      "objective": "Aplicar autenticação e autorização com OAuth 2.0, OpenID Connect e JWT sem expor credenciais ou dados sensíveis.",
+      "prerequisites": ["checkpoint-distributed-systems"]
+    },
+    {
+      "id": "secrets-configuration",
+      "module": "security-observability",
+      "title": "Segredos e configuração operacional",
+      "kind": "lesson",
+      "objective": "Separar configuração de código, proteger segredos e decidir novos parâmetros com defaults e precedência previsíveis.",
+      "prerequisites": ["backend-security"]
+    },
+    {
+      "id": "openapi-health",
+      "module": "security-observability",
+      "title": "OpenAPI e health checks",
+      "kind": "lesson",
+      "objective": "Documentar contratos e expor verificações de liveness e readiness que representem o estado real da aplicação.",
+      "prerequisites": ["secrets-configuration"]
+    },
+    {
+      "id": "telemetry-auditing",
+      "module": "security-observability",
+      "title": "Logs, métricas, traces e auditoria",
+      "kind": "lesson",
+      "objective": "Correlacionar sinais com OpenTelemetry e registrar auditoria suficiente sem vazar informações protegidas.",
+      "prerequisites": ["openapi-health"]
+    },
+    {
+      "id": "checkpoint-security-observability",
+      "module": "security-observability",
+      "title": "Checkpoint de segurança e observabilidade",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Proteger uma API e demonstrar sua operação por documentação, saúde, telemetria e auditoria.",
+      "prerequisites": ["telemetry-auditing"]
+    },
+    {
+      "id": "backend-test-strategy",
+      "module": "quality-delivery",
+      "title": "Estratégia de testes do backend",
+      "kind": "lesson",
+      "objective": "Escolher entre testes unitários, de componente, integração e contrato conforme o risco e o custo.",
+      "prerequisites": ["checkpoint-security-observability"]
+    },
+    {
+      "id": "quarkus-restassured-tests",
+      "module": "quality-delivery",
+      "title": "Testes Quarkus, RestAssured e Postman",
+      "kind": "lesson",
+      "objective": "Verificar endpoints, status, payloads e erros em testes automatizados e explorações reproduzíveis.",
+      "prerequisites": ["backend-test-strategy"]
+    },
+    {
+      "id": "testcontainers",
+      "module": "quality-delivery",
+      "title": "Testcontainers",
+      "kind": "lesson",
+      "objective": "Executar testes de integração contra dependências reais e isoladas em containers.",
+      "prerequisites": ["quarkus-restassured-tests"]
+    },
+    {
+      "id": "jasperreports",
+      "module": "quality-delivery",
+      "title": "Relatórios com JasperReports",
+      "kind": "lesson",
+      "objective": "Gerar e testar relatórios PDF ou planilhas separando template, dados e entrega do arquivo.",
+      "prerequisites": ["testcontainers"]
+    },
+    {
+      "id": "docker-containers",
+      "module": "quality-delivery",
+      "title": "Docker",
+      "kind": "lesson",
+      "objective": "Construir uma imagem enxuta e executar a aplicação e suas dependências com configuração reproduzível.",
+      "prerequisites": ["jasperreports"]
+    },
+    {
+      "id": "pipeline-quality",
+      "module": "quality-delivery",
+      "title": "Pipeline, qualidade e SonarQube",
+      "kind": "lesson",
+      "objective": "Automatizar build, testes, análise estática, cobertura e publicação com falhas visíveis e artefatos rastreáveis.",
+      "prerequisites": ["docker-containers"]
+    },
+    {
+      "id": "kubernetes-helm",
+      "module": "quality-delivery",
+      "title": "Kubernetes e Helm",
+      "kind": "lesson",
+      "objective": "Empacotar manifests com Helm e configurar deploy, serviço, recursos, segredos e health checks em cluster.",
+      "prerequisites": ["pipeline-quality"]
+    },
+    {
+      "id": "checkpoint-quality-delivery",
+      "module": "quality-delivery",
+      "title": "Checkpoint de testes e entrega",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Entregar uma versão testada, analisada, containerizada e preparada para deploy automatizado.",
+      "prerequisites": ["kubernetes-helm"]
+    },
+    {
+      "id": "angular-architecture",
+      "module": "web-qa-integration",
+      "title": "Visão de Angular e TypeScript",
+      "kind": "lesson",
+      "objective": "Reconhecer models, componentes, serviços HTTP, RxJS, lazy loading e organização por funcionalidade no frontend.",
+      "prerequisites": ["checkpoint-quality-delivery"]
+    },
+    {
+      "id": "frontend-state-design-errors",
+      "module": "web-qa-integration",
+      "title": "Estado, design system e erros no frontend",
+      "kind": "lesson",
+      "objective": "Explicar o papel de NGXS, bibliotecas de componentes, acessibilidade e tratamento consistente de erros de API.",
+      "prerequisites": ["angular-architecture"]
+    },
+    {
+      "id": "web-mobile-e2e",
+      "module": "web-qa-integration",
+      "title": "Testes E2E web e mobile",
+      "kind": "lesson",
+      "objective": "Estruturar testes com Cypress e reconhecer Appium, WebdriverIO e BrowserStack para cenários mobile e multiplataforma.",
+      "prerequisites": ["frontend-state-design-errors"]
+    },
+    {
+      "id": "qa-automation",
+      "module": "web-qa-integration",
+      "title": "Automação de QA",
+      "kind": "lesson",
+      "objective": "Combinar seletores estáveis, commands, pages, specs e automações com Python e pytest em uma estratégia de QA.",
+      "prerequisites": ["web-mobile-e2e"]
+    },
+    {
+      "id": "checkpoint-web-qa-integration",
+      "module": "web-qa-integration",
+      "title": "Checkpoint de integração web e QA",
+      "kind": "checkpoint",
+      "required": true,
+      "objective": "Validar um fluxo frontend-backend de ponta a ponta e explicar as responsabilidades de cada camada.",
+      "prerequisites": ["qa-automation"]
+    },
+    {
+      "id": "final-microservice-project",
+      "module": "final-project",
+      "title": "Projeto final de microsserviço",
+      "kind": "final-project",
+      "required": true,
+      "objective": "Construir, testar, proteger, observar, containerizar e explicar um microsserviço cumulativo com persistência e integração.",
+      "prerequisites": ["checkpoint-web-qa-integration"]
+    }
+  ]
+}

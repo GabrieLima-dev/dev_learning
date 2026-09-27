@@ -1,21 +1,24 @@
-# Temporários e logs
+# Build e caches
+target/
+.cache/
+**/__pycache__/
+*.pyc
+
+# Maven Wrapper baixa a distribuição localmente
+.mvn/wrapper/dists/
+
+# IDE e sistema
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Temporários e segredos
 *.log
 *.tmp
 *.bak
 *.swp
 *~
-
-# Caches e resultados locais
-.cache/
-**/__pycache__/
-evals/results/
-.codex/cache/
-
-# Estado transitório
-.state/*
-!.state/.gitkeep
-
-# Segredos e credenciais
 .env
 .env.*
 *.pem
@@ -24,6 +27,3 @@ evals/results/
 *.p12
 *credentials*
 *secret*
-
-# Outros arquivos
-.DS_Store

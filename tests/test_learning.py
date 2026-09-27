@@ -104,6 +104,18 @@ class LearningStoreTest(unittest.TestCase):
         state = self.store.load_state()
         self.assertTrue(result["passed"])
         self.assertEqual("READY", state["status"])
+        self.assertEqual("git-github-foundations", state["lesson"])
+        self.assertIsNone(state["exercise"])
+
+        self.start_exercise()
+        self.store.review_start()
+        self.store.review_result(
+            "passed",
+            tests_passed=True,
+            analysis_passed=True,
+            summary="fundamentos de Git demonstrados",
+        )
+        state = self.store.load_state()
         self.assertEqual("input-output", state["lesson"])
         self.assertIsNone(state["exercise"])
 

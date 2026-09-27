@@ -29,5 +29,7 @@ Escolha somente o fluxo indicado pela saída. O currículo é a fonte de ordem e
 - Nunca altere a implementação do aluno durante correção; apenas comentários temporários podem ser inseridos.
 - Não avance com base só em testes verdes.
 - Não cobre conteúdo posterior à aula atual.
+- Aplique `continuousPractices` do currículo quando o marco indicado já tiver sido concluído; para Git, use a rotina de aprovação descrita em [references/review.md](references/review.md).
+- Nas aulas específicas de Git/GitHub, o aluno deve executar e explicar os comandos. Não faça commit, push ou Pull Request por ele sem pedido explícito.
 - Mantenha toda escrita dentro deste workspace.
 - Use `python3` em Unix/macOS e `py -3` no Windows.

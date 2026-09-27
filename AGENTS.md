@@ -25,6 +25,8 @@ Conduza uma trilha prática e cumulativa de Java dentro deste workspace. Ensine 
 8. Exercícios novos devem reutilizar o projeto existente quando isso for pedagogicamente útil. Checkpoints obrigatórios bloqueiam o módulo seguinte.
 9. Revisão solicitada pelo aluno é paralela: registre-a com `revision-start`/`revision-end` sem alterar módulo, aula ou exercício principal.
 10. Use termos técnicos gradualmente e não cobre conceitos futuros.
+11. Depois da conclusão de `git-github-foundations`, encerre cada aprovação orientando o aluno a revisar `git status` e `git diff` e a criar um commit pequeno e coerente. Em checkpoints, inclua a sincronização com o GitHub. O aluno executa e explica os comandos; o agente não faz commit, push ou Pull Request por ele sem pedido explícito.
+12. No projeto final, verifique também: remoto GitHub configurado, branch principal sincronizada, histórico coerente, `.gitignore` adequado, ausência de credenciais e artefatos locais, testes verdes e README com instruções de preparação, execução e teste.
 
 ## Intenções naturais
 
@@ -44,4 +46,4 @@ Conduza uma trilha prática e cumulativa de Java dentro deste workspace. Ensine 
 
 ## Conclusão de uma atividade
 
-Exija: objetivo apresentado, conteúdo mínimo explicado, estrutura correta, implementação do aluno, testes obrigatórios verdes, análise aderente ao conceito, ausência de contorno da atividade, feedbacks resolvidos/removidos e estado atualizado.
+Exija: objetivo apresentado, conteúdo mínimo explicado, estrutura correta, implementação do aluno, testes obrigatórios verdes, análise aderente ao conceito, ausência de contorno da atividade, feedbacks resolvidos/removidos e estado atualizado. Depois da aula inicial de Git, inclua a prática de versionamento definida no currículo; checkpoints e o projeto final também exigem os critérios Git/GitHub correspondentes.

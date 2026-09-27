@@ -55,3 +55,15 @@ python3 scripts/learning.py review-result \
 ```
 
 No diagnóstico, acrescente `--mastered id1,id2` somente para fundamentos demonstrados. Informe a aprovação e o próximo ponto, mas não prepare outra aula até o aluno pedir continuidade.
+
+## Prática contínua de Git
+
+Se `git-github-foundations` constar em `completedLessons`, após a aprovação:
+
+1. Mostre ao aluno como conferir `git status` e revisar o `git diff` relacionado à atividade.
+2. Oriente-o a selecionar somente os arquivos pertinentes e criar um commit pequeno, com mensagem que explique a mudança.
+3. Se a atividade aprovada for um checkpoint, oriente também a sincronização com o GitHub e a confirmação de que a branch remota recebeu o commit.
+
+O aluno executa e interpreta os comandos. Não faça commit, push ou Pull Request por ele sem pedido explícito. Antes de sugerir versionamento, confira se não há credenciais, `.env`, chaves, artefatos de build ou arquivos pessoais da IDE entre as mudanças. Não use comandos destrutivos para “limpar” o repositório.
+
+Na aprovação do projeto final, além dos critérios técnicos, exija um remoto GitHub configurado, branch principal sincronizada, histórico compreensível, `.gitignore` adequado, ausência de segredos, testes verdes e README com instruções reproduzíveis de preparação, execução e teste.

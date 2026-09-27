@@ -1,28 +1,35 @@
 {
   "track": "java",
-  "version": 2,
+  "version": 4,
   "languageLevel": 25,
-  "scope": "Java e backend como eixo principal, com arquitetura, microsserviços, QA, frontend e infraestrutura complementares.",
+  "scope": "Java e backend como eixo principal, com Git e GitHub como prática contínua e arquitetura, microsserviços, QA, frontend e infraestrutura complementares.",
   "sourceDocuments": [
     "java_arquitetura_ms-main/resumo_geral_linguagem_java.md",
     "java_arquitetura_ms-main/resumo_arquitetura_java_microsservicos.md"
   ],
+  "continuousPractices": [
+    {
+      "id": "git-versioning",
+      "startsAfter": "git-github-foundations",
+      "objective": "Ao concluir cada exercício aprovado, revisar status e diff, criar um commit pequeno e coerente sem segredos ou artefatos indevidos e sincronizar o repositório GitHub em cada checkpoint."
+    }
+  ],
   "modules": [
-    {"id": "fundamentals", "title": "Fundamentos", "result": "Resolver problemas simples e explicar a execução de um programa Java."},
+    {"id": "fundamentals", "title": "Fundamentos", "result": "Versionar a própria evolução, resolver problemas simples e explicar a execução de um programa Java."},
     {"id": "code-structure", "title": "Estrutura do código", "result": "Organizar comportamento em métodos, classes e packages."},
     {"id": "oop", "title": "Orientação a Objetos", "result": "Modelar domínio com responsabilidades, identidade e contratos."},
     {"id": "java-apis", "title": "APIs essenciais", "result": "Manipular dados com os principais tipos e APIs da plataforma."},
     {"id": "functional-modern", "title": "Java funcional e moderno", "result": "Transformar dados com recursos modernos e código idiomático."},
     {"id": "concurrency", "title": "Concorrência", "result": "Executar trabalho concorrente com segurança e critérios claros."},
     {"id": "data-access", "title": "SQL e acesso a dados", "result": "Implementar persistência relacional segura, transacional e testável."},
-    {"id": "engineering", "title": "Engenharia de software", "result": "Produzir código sustentável, testável e bem organizado."},
+    {"id": "engineering", "title": "Engenharia de software", "result": "Colaborar com Git e GitHub e usar o IntelliJ IDEA e um processo orientado por evidências para desenvolver, investigar bugs e produzir código sustentável, testável e bem organizado."},
     {"id": "backend-core", "title": "Backend com Quarkus", "result": "Construir uma API com contratos e responsabilidades bem separados."},
     {"id": "orm-persistence", "title": "Persistência com ORM", "result": "Persistir o domínio com JPA e Hibernate sem misturar infraestrutura e regras."},
     {"id": "distributed-systems", "title": "Microsserviços e processamento assíncrono", "result": "Integrar serviços por fluxos síncronos e assíncronos resilientes."},
     {"id": "security-observability", "title": "Segurança e observabilidade", "result": "Proteger e operar uma aplicação observável."},
     {"id": "quality-delivery", "title": "Testes e entrega", "result": "Validar, empacotar e entregar o backend de forma reproduzível."},
     {"id": "web-qa-integration", "title": "Integração web e QA", "result": "Colaborar com frontend e QA compreendendo contratos, camadas e testes."},
-    {"id": "final-project", "title": "Projeto final", "result": "Integrar os conceitos em um microsserviço completo."}
+    {"id": "final-project", "title": "Projeto final", "result": "Integrar os conceitos em um microsserviço completo, reproduzível e publicado em um repositório GitHub atualizado."}
   ],
   "lessons": [
     {
@@ -32,6 +39,14 @@
       "kind": "diagnostic",
       "objective": "Resolver pequenos desafios de variáveis, decisões, repetição e métodos para definir o ponto inicial sem pular fundamentos essenciais.",
       "prerequisites": []
+    },
+    {
+      "id": "git-github-foundations",
+      "module": "fundamentals",
+      "title": "Git e GitHub desde o início",
+      "kind": "lesson",
+      "objective": "Explicar repositório, diretório de trabalho, staging e commit; inspecionar mudanças com status e diff; preparar e registrar um commit coerente; consultar o histórico; configurar identidade e .gitignore; conectar um remoto GitHub e sincronizar mudanças sem versionar credenciais ou artefatos locais.",
+      "prerequisites": ["initial-diagnostic"]
     },
     {
       "id": "variables-types",
@@ -103,7 +118,7 @@
       "title": "Checkpoint de fundamentos",
       "kind": "checkpoint",
       "required": true,
-      "objective": "Combinar tipos, expressões, decisões, repetição, arrays e textos em um desafio menos guiado.",
+      "objective": "Combinar tipos, expressões, decisões, repetição, arrays e textos em um desafio menos guiado, revisar as mudanças e registrar a solução em um commit coerente.",
       "prerequisites": ["strings"]
     },
     {
@@ -457,12 +472,36 @@
       "prerequisites": ["checkpoint-data-access"]
     },
     {
+      "id": "git-github-collaboration",
+      "module": "engineering",
+      "title": "Git e GitHub para colaboração",
+      "kind": "lesson",
+      "objective": "Criar e trocar branches, comparar históricos, integrar mudanças com merge ou rebase de forma consciente, resolver conflitos, revisar Pull Requests e usar tags ou releases para identificar versões relevantes.",
+      "prerequisites": ["maven-gradle"]
+    },
+    {
+      "id": "intellij-idea-workflow",
+      "module": "engineering",
+      "title": "IntelliJ IDEA: projeto, comandos e fluxo de trabalho",
+      "kind": "lesson",
+      "objective": "Importar e sincronizar um projeto Maven, navegar por arquivos, símbolos, declarações, usos e ações, executar aplicações e testes, configurar Run/Debug e usar terminal, geração de código, formatação e refatorações seguras no IntelliJ IDEA.",
+      "prerequisites": ["git-github-collaboration"]
+    },
+    {
+      "id": "bugs-pbis-acceptance-criteria",
+      "module": "engineering",
+      "title": "Bugs, PBIs e critérios de aceite",
+      "kind": "lesson",
+      "objective": "Distinguir bug, sintoma e causa entre si e em relação a PBIs e outros itens de trabalho, convertendo um relato em contexto, resultado esperado, resultado atual, passos reproduzíveis, evidências, severidade, prioridade e critérios de aceite verificáveis.",
+      "prerequisites": ["intellij-idea-workflow"]
+    },
+    {
       "id": "junit",
       "module": "engineering",
       "title": "Testes com JUnit",
       "kind": "lesson",
       "objective": "Escrever testes unitários legíveis, determinísticos e capazes de verificar resultados e exceções.",
-      "prerequisites": ["maven-gradle"]
+      "prerequisites": ["bugs-pbis-acceptance-criteria"]
     },
     {
       "id": "mockito-test-doubles",
@@ -473,12 +512,20 @@
       "prerequisites": ["junit"]
     },
     {
+      "id": "debugging-root-cause",
+      "module": "engineering",
+      "title": "Debugger e investigação de causa raiz",
+      "kind": "lesson",
+      "objective": "Reproduzir e reduzir uma falha, interpretar erros, stack traces, logs e testes, formular hipóteses e usar breakpoints, stepping, call stack, variáveis, watches, avaliação de expressões, breakpoints condicionais e logpoints para localizar a causa raiz, corrigi-la e validar um teste de regressão.",
+      "prerequisites": ["mockito-test-doubles"]
+    },
+    {
       "id": "clean-code-refactoring",
       "module": "engineering",
       "title": "Clean Code e refatoração",
       "kind": "lesson",
       "objective": "Melhorar nomes, tamanho de métodos, constantes, fluxo, imutabilidade e APIs sem alterar comportamento.",
-      "prerequisites": ["mockito-test-doubles"]
+      "prerequisites": ["debugging-root-cause"]
     },
     {
       "id": "solid",
@@ -510,7 +557,7 @@
       "title": "Checkpoint de engenharia",
       "kind": "checkpoint",
       "required": true,
-      "objective": "Entregar um componente testável, observável, organizado por funcionalidade e com responsabilidades claras.",
+      "objective": "Entregar em uma branch um componente testável, observável, organizado por funcionalidade e com responsabilidades claras; reproduzir um bug preparado, registrar evidências, localizar e explicar sua causa raiz com as ferramentas do IntelliJ IDEA, aplicar uma correção comprovada por teste de regressão e critérios de aceite e preparar as mudanças para revisão e integração no GitHub.",
       "prerequisites": ["feature-organization-workflow"]
     },
     {
@@ -821,7 +868,7 @@
       "title": "Projeto final de microsserviço",
       "kind": "final-project",
       "required": true,
-      "objective": "Construir, testar, proteger, observar, containerizar e explicar um microsserviço cumulativo com persistência e integração.",
+      "objective": "Construir, testar, proteger, observar, containerizar e explicar um microsserviço cumulativo com persistência e integração, mantendo no GitHub um repositório público ou privado atualizado, sem credenciais, com branch principal sincronizada, histórico coerente, testes verdes e README de preparação, execução e teste.",
       "prerequisites": ["checkpoint-web-qa-integration"]
     }
   ]

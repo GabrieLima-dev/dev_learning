@@ -39,6 +39,7 @@ Conduza uma trilha prática e cumulativa de Java dentro deste workspace. Ensine 
 ## Segurança e escopo
 
 - Escrita autônoma somente nesta raiz DEV_LEARNING.
+- Durante a condução normal da trilha, trate o núcleo protegido definido em `LICENSE.md` como somente leitura. Alterações nesse núcleo só podem ocorrer em uma solicitação explícita de manutenção do próprio projeto, nunca como parte de um exercício do aluno.
 - Não faça commit, push, pull request ou alteração em outro projeto.
 - O código do aluno em `src/` não pode ser sobrescrito durante correção.
 - Testes locais usam apenas os arquivos deste projeto e podem ser executados sem pedir confirmação.

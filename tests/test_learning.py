@@ -56,6 +56,37 @@ class LearningStoreTest(unittest.TestCase):
         self.assertEqual("WAIT_FOR_STUDENT", self.store.continue_action()["action"])
         self.assertEqual("Diagnostico", state["exercise"]["name"])
 
+    def test_initial_diagnostic_can_be_skipped_before_it_starts(self) -> None:
+        result = self.store.skip_initial_diagnostic()
+        state = self.store.load_state()
+
+        self.assertTrue(result["skipped"])
+        self.assertEqual([], result["archivedFiles"])
+        self.assertIn("initial-diagnostic", state["completedLessons"])
+        self.assertEqual("git-github-foundations", state["lesson"])
+        self.assertEqual("READY", state["status"])
+        self.assertEqual("SKIPPED", state["lastResult"]["outcome"])
+
+    def test_skipping_active_diagnostic_archives_its_files(self) -> None:
+        self.start_exercise()
+        source = self.root / "src/main/java/dev/learning/Diagnostic.java"
+        test = self.root / "src/test/java/dev/learning/DiagnosticTest.java"
+
+        result = self.store.skip_initial_diagnostic()
+
+        self.assertFalse(source.exists())
+        self.assertFalse(test.exists())
+        self.assertTrue(source.with_suffix(".java.skipped").is_file())
+        self.assertTrue(test.with_suffix(".java.skipped").is_file())
+        self.assertEqual(2, len(result["archivedFiles"]))
+        self.assertIsNone(self.store.load_state()["exercise"])
+
+    def test_only_initial_diagnostic_can_be_skipped(self) -> None:
+        self.store.skip_initial_diagnostic()
+
+        with self.assertRaisesRegex(LearningError, "somente o diagnóstico inicial"):
+            self.store.skip_initial_diagnostic()
+
     def test_paths_cannot_escape_workspace_or_expected_source_root(self) -> None:
         self.store.teach()
         with self.assertRaises(LearningError):

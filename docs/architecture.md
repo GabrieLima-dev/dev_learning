@@ -14,14 +14,18 @@ O controlador persiste estados estáveis e registra também as transições inte
 
 ```text
 READY
+  ├─ skip-diagnostic ───────────────────────────────→ READY (próxima aula)
   └─ teach ─→ TEACHING
+                 ├─ skip-diagnostic ────────────────→ READY (próxima aula)
                  └─ assign ─→ WAITING_FOR_STUDENT
+                                    ├─ skip-diagnostic ─→ READY (próxima aula)
                                     └─ review-start ─→ REVIEWING
                                            ├─ needs-correction ─→ WAITING_FOR_STUDENT
                                            └─ passed ─→ READY (via PASSED e COMPLETED)
 ```
 
 Uma interrupção em qualquer estado é recuperável por `learning.py continue`.
+`skip-diagnostic` é aceito somente no diagnóstico inicial. Se o exercício já existir, seus arquivos são preservados com o sufixo `.java.skipped`, fora da compilação das próximas atividades.
 
 ## Limite de escrita
 

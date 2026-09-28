@@ -307,6 +307,73 @@ class LearningStore:
         self._save(state, "REVIEWING", f"tentativa {exercise['attempts']} iniciada")
         return {"status": state["status"], "resumed": False, "exercise": exercise}
 
+    def skip_initial_diagnostic(self) -> dict[str, Any]:
+        state = self.load_state()
+        self._ensure_no_revision(state)
+        lesson = self.current_lesson(state)
+        if lesson is None or lesson["id"] != "initial-diagnostic":
+            raise LearningError("somente o diagnóstico inicial pode ser pulado")
+
+        archived_files: list[str] = []
+        exercise = state.get("exercise")
+        if exercise:
+            files_to_archive: list[tuple[Path, Path]] = []
+            for field, required_root in (
+                ("source", Path("src/main/java")),
+                ("test", Path("src/test/java")),
+            ):
+                path = self._exercise_path(exercise[field], required_root)
+                if not path.exists():
+                    continue
+                archived = path.with_suffix(f"{path.suffix}.skipped")
+                if archived.exists():
+                    raise LearningError(f"arquivo de diagnóstico arquivado já existe: {archived}")
+                files_to_archive.append((path, archived))
+
+            for path, archived in files_to_archive:
+                path.rename(archived)
+                archived_files.append(archived.relative_to(self.root).as_posix())
+
+        completed = list(state["completedLessons"])
+        completed.append(lesson["id"])
+        state["completedLessons"] = [
+            item["id"] for item in self.lessons if item["id"] in set(completed)
+        ]
+        state["lastResult"] = {
+            "lesson": lesson["id"],
+            "exercise": exercise["name"] if exercise else None,
+            "outcome": "SKIPPED",
+            "testsPassed": False,
+            "analysisPassed": False,
+            "summary": "diagnóstico inicial pulado a pedido do aluno",
+            "at": utc_now(),
+        }
+        state["status"] = "COMPLETED"
+        self._append_history(state, "SKIPPED", "diagnóstico inicial pulado pelo aluno")
+
+        next_lesson = self._next_available(state["completedLessons"])
+        state["lesson"] = next_lesson["id"] if next_lesson else None
+        if next_lesson:
+            state["module"] = next_lesson["module"]
+        state["exercise"] = None
+        state["requiredCheckpoint"] = None
+        state["status"] = "READY"
+        self._save(state, "READY", "próxima ação liberada após pular o diagnóstico")
+        point = f"{next_lesson['title']} (`READY`)" if next_lesson else "trilha concluída"
+        self._write_session(
+            lesson["title"],
+            exercise["name"] if exercise else "não iniciado",
+            "pulado a pedido do aluno",
+            point,
+            "continuar pela trilha completa quando quiser",
+        )
+        return {
+            "status": state["status"],
+            "skipped": True,
+            "nextLesson": next_lesson,
+            "archivedFiles": archived_files,
+        }
+
     def review_result(
         self,
         outcome: str,
@@ -556,6 +623,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("continue")
     subparsers.add_parser("teach")
     subparsers.add_parser("review-start")
+    subparsers.add_parser("skip-diagnostic")
     subparsers.add_parser("summary")
     subparsers.add_parser("feedback-list")
 
@@ -594,6 +662,8 @@ def main(argv: list[str] | None = None) -> int:
             output = store.assign(args.name, args.source, args.test)
         elif args.command == "review-start":
             output = store.review_start()
+        elif args.command == "skip-diagnostic":
+            output = store.skip_initial_diagnostic()
         elif args.command == "review-result":
             mastered = [item.strip() for item in args.mastered.split(",") if item.strip()]
             output = store.review_result(

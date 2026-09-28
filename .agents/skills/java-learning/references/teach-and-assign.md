@@ -10,7 +10,15 @@
    - exemplo mínimo que não resolva o exercício;
    - motivo técnico da localização de source e teste.
 
-Para `initial-diagnostic`, não dê aula: prepare de dois a quatro microdesafios independentes sobre fundamentos. O resultado pode marcar como dominadas apenas aulas realmente demonstradas.
+Para `initial-diagnostic`, não dê aula: prepare de dois a quatro microdesafios independentes sobre fundamentos. Ao apresentar ou retomar esse diagnóstico, diga claramente que ele é opcional e que o aluno pode escrever no chat que deseja pulá-lo. O resultado pode marcar como dominadas apenas aulas realmente demonstradas.
+
+Se o aluno pedir para pular, não revise a solução, não peça correções e não exija que os testes passem. Execute:
+
+```bash
+python3 scripts/learning.py skip-diagnostic
+```
+
+Esse comando só funciona no `initial-diagnostic`. Ele registra a escolha, arquiva os arquivos já criados com o sufixo `.java.skipped` para que não interfiram nos próximos testes e leva o aluno à primeira aula regular definida no currículo. Explique que nenhuma aula posterior será marcada como dominada ou ignorada: o aluno seguirá a trilha completa a partir dessa primeira aula.
 
 Para `checkpoint`, reduza os TODOs e combine conhecimentos já concluídos. Não introduza conceito novo.
 
@@ -19,7 +27,13 @@ Para `git-github-foundations` e `git-github-collaboration`, combine uma alteraç
 ## Criar o exercício
 
 1. Reuse o domínio e as classes existentes quando isso fizer sentido; não reconstrua o projeto.
-2. Crie o starter em `src/main/java/dev/learning/...` com assinatura, tipos e TODOs suficientes, mas sem corpo que entregue a resposta.
+2. Crie o starter em `src/main/java/dev/learning/...` com assinaturas e tipos suficientes para orientar o aluno, mas sem corpo que entregue a resposta.
+
+   - Coloque um TODO em cada ponto que exige implementação.
+   - Escreva cada TODO como uma instrução curta: indique a ação e o comportamento esperado com os nomes do domínio. Acrescente limites ou casos especiais somente quando forem relevantes para o exercício.
+   - Evite textos vagos, como `implemente aqui`, e detalhes que revelem a solução, como o código pronto ou uma sequência completa de passos.
+   - Exemplo: `// TODO: retorne o total dos preços recebidos; se não houver preços, retorne zero.`
+
 3. Crie testes JUnit em `src/test/java/dev/learning/...`. Nomes dos testes devem explicar comportamentos e cobrir os critérios objetivos, sem depender do texto do tutor.
 4. Confirme que os arquivos estão dentro do workspace e registre:
 

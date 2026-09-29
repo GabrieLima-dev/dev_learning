@@ -35,7 +35,7 @@ Esta trilha transforma em prática progressiva o conteúdo de referência de `ja
 
 O versionamento acompanha o código em três níveis:
 
-1. **Início da trilha** — compreender repositório, diretório de trabalho, staging e commit; usar `status`, `diff`, `add`, `commit` e `log`; configurar identidade e `.gitignore`; reconhecer arquivos que não devem ser versionados; conectar o remoto e fazer o primeiro push ao GitHub.
+1. **Início da trilha** — compreender repositório, diretório de trabalho, staging e commit; usar `status`, `diff`, `add`, `commit` e `log`; configurar identidade e `.gitignore`; reconhecer arquivos que não devem ser versionados; conferir o remoto e explicar o efeito de `pull` e `push`, sem exigir o primeiro push ao GitHub.
 2. **Prática contínua** — revisar o diff antes de cada commit, escrever mensagens que expliquem a mudança, manter commits pequenos, sincronizar checkpoints e confirmar que testes e estado do repositório estão limpos. Nenhum segredo, cache, configuração pessoal da IDE ou artefato de build deve entrar no histórico.
 3. **Engenharia e colaboração** — criar e trocar branches, comparar históricos, integrar mudanças, compreender merge e rebase, resolver conflitos, revisar Pull Requests e identificar quando usar tags ou releases.
 

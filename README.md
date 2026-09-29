@@ -101,7 +101,7 @@ O aluno aprenderá gradualmente a:
 - consultar o histórico com `git log` e comparar versões;
 - desfazer alterações com segurança, entendendo antes o que será descartado;
 - configurar `.gitignore` e nunca versionar senhas, tokens, chaves, arquivos `.env`, caches ou artefatos de build;
-- conectar o repositório local ao GitHub e sincronizá-lo com `git pull` e `git push`;
+- conferir o remoto e explicar como `git pull` e `git push` sincronizam um repositório, sem exigir publicação no GitHub nesta primeira prática;
 - trabalhar com branches usando `git switch`, integrar mudanças e resolver conflitos conscientemente;
 - revisar diferenças, usar Pull Requests e marcar versões relevantes do projeto.
 

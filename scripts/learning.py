@@ -27,6 +27,10 @@ VALID_STATES = {
 FEEDBACK_PATTERN = re.compile(
     r"DEV_LEARNING_FEEDBACK\[(SYNTAX|LOGIC|CONCEPT|DESIGN|GOOD_PRACTICE)\]"
 )
+PACKAGE_DECLARATION_PATTERN = re.compile(
+    r"^\s*package\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*;",
+    re.MULTILINE,
+)
 
 
 class LearningError(RuntimeError):
@@ -300,6 +304,8 @@ class LearningStore:
             raise LearningError("source e teste devem existir antes de registrar o exercício")
         if source_path.suffix != ".java" or test_path.suffix != ".java":
             raise LearningError("source e teste devem ser arquivos .java")
+        self._ensure_package_matches_path(source_path, Path("src/main/java"), "source")
+        self._ensure_package_matches_path(test_path, Path("src/test/java"), "teste")
 
         lesson = self.current_lesson(state)
         assert lesson is not None
@@ -343,6 +349,21 @@ class LearningStore:
             "o aluno lê o material conceitual, realiza a prática e informa “terminei”",
         )
         return {"status": state["status"], "exercise": state["exercise"]}
+
+    def _ensure_package_matches_path(
+        self, java_path: Path, source_root: Path, file_role: str
+    ) -> None:
+        expected_package = ".".join(
+            java_path.relative_to(self.root / source_root).parent.parts
+        )
+        content = java_path.read_text(encoding="utf-8")
+        match = PACKAGE_DECLARATION_PATTERN.search(content)
+        declared_package = match.group(1) if match else None
+        if declared_package != expected_package:
+            found = declared_package or "ausente"
+            raise LearningError(
+                f"package do {file_role} deve ser {expected_package}; encontrado: {found}"
+            )
 
     def review_start(self) -> dict[str, Any]:
         state = self.load_state()
@@ -416,6 +437,18 @@ class LearningStore:
             f"arquivos atualizados para {expected_directory}",
         )
         return {"exercise": exercise, "directory": expected_directory}
+
+    def rename_active_exercise(self, name: str) -> dict[str, Any]:
+        """Atualiza o nome exibido do exercício ativo durante uma manutenção da trilha."""
+        state = self.load_state()
+        self._ensure_no_revision(state)
+        exercise = state.get("exercise")
+        if not exercise or not name.strip():
+            raise LearningError("exercício ativo e nome não vazio são obrigatórios")
+        previous = exercise["name"]
+        exercise["name"] = name.strip()
+        self._save(state, "EXERCISE_RENAMED", f"exercício renomeado: {previous}")
+        return {"exercise": exercise, "renamed": previous != exercise["name"]}
 
     def skip_initial_diagnostic(self) -> dict[str, Any]:
         state = self.load_state()
@@ -813,6 +846,8 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("skip-diagnostic")
     subparsers.add_parser("migrate-active-concept-filename")
     subparsers.add_parser("migrate-active-exercise-directory")
+    rename_exercise = subparsers.add_parser("rename-active-exercise")
+    rename_exercise.add_argument("--name", required=True)
     subparsers.add_parser("reset-after-diagnostic")
     subparsers.add_parser("summary")
     subparsers.add_parser("feedback-list")
@@ -858,6 +893,8 @@ def main(argv: list[str] | None = None) -> int:
             output = store.migrate_active_concept_filename()
         elif args.command == "migrate-active-exercise-directory":
             output = store.migrate_active_exercise_directory()
+        elif args.command == "rename-active-exercise":
+            output = store.rename_active_exercise(args.name)
         elif args.command == "reset-after-diagnostic":
             output = store.reset_after_diagnostic()
         elif args.command == "review-result":

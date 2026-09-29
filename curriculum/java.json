@@ -57,7 +57,7 @@
       "directoryName": "lesson02_git",
       "kind": "lesson",
       "diagnosticEligible": false,
-      "objective": "Diferenciar Git como sistema de controle de versão local e distribuído de GitHub como hospedagem e colaboração remota; compreender repositório, diretório de trabalho, arquivos rastreados ou não, staging area, commit, hash, histórico, branch principal e remoto; configurar identidade; inspecionar mudanças com status e diff; preparar arquivos específicos, revisar o staged e registrar um commit coerente; consultar o histórico; usar .gitignore e proteger segredos; reconhecer init e clone; conferir origin e sincronizar com pull e push, distinguindo efeitos locais de alterações no GitHub.",
+      "objective": "Diferenciar Git como sistema de controle de versão local e distribuído de GitHub como hospedagem e colaboração remota; compreender repositório, diretório de trabalho, arquivos rastreados ou não, staging area, commit, hash, histórico, branch principal e remoto; configurar identidade; inspecionar mudanças com status e diff; preparar arquivos específicos, revisar o staged e registrar um commit coerente; consultar o histórico; usar .gitignore e proteger segredos; reconhecer init e clone; conferir origin e explicar pull e push, distinguindo efeitos locais de alterações no GitHub.",
       "prerequisites": ["initial-diagnostic"]
     },
     {

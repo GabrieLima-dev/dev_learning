@@ -39,11 +39,12 @@ class LearningStoreTest(unittest.TestCase):
             "# Diagnóstico inicial\n\n[Prática](./Diagnostic.java)\n", encoding="utf-8"
         )
         marker = "// DEV_LEARNING_FEEDBACK[LOGIC]: reveja a condição\n" if feedback else ""
+        package = f"dev.learning.{directory}"
         (self.root / source).write_text(
-            f"package dev.learning;\n{marker}public class Diagnostic {{}}\n", encoding="utf-8"
+            f"package {package};\n{marker}public class Diagnostic {{}}\n", encoding="utf-8"
         )
         (self.root / test).write_text(
-            "package dev.learning;\nclass DiagnosticTest {}\n", encoding="utf-8"
+            f"package {package};\nclass DiagnosticTest {{}}\n", encoding="utf-8"
         )
         return concept.as_posix(), source.as_posix(), test.as_posix()
 
@@ -106,6 +107,29 @@ class LearningStoreTest(unittest.TestCase):
 
         with self.assertRaisesRegex(LearningError, "lesson00_diagnostico_inicial"):
             self.store.assign("Diagnostico", invalid_source.as_posix(), test)
+
+    def test_exercise_requires_packages_that_match_their_paths(self) -> None:
+        _, source, test = self.create_exercise_files()
+        source_path = self.root / source
+        test_path = self.root / test
+        source_path.write_text("package dev.learning.other;\nclass Diagnostic {}\n", encoding="utf-8")
+        self.store.teach()
+
+        with self.assertRaisesRegex(
+            LearningError, "package do source deve ser dev.learning.lesson00_diagnostico_inicial"
+        ):
+            self.store.assign("Diagnostico", source, test)
+
+        source_path.write_text(
+            "package dev.learning.lesson00_diagnostico_inicial;\nclass Diagnostic {}\n",
+            encoding="utf-8",
+        )
+        test_path.write_text("package dev.learning.other;\nclass DiagnosticTest {}\n", encoding="utf-8")
+
+        with self.assertRaisesRegex(
+            LearningError, "package do teste deve ser dev.learning.lesson00_diagnostico_inicial"
+        ):
+            self.store.assign("Diagnostico", source, test)
 
     def test_active_concept_path_can_be_migrated_to_the_new_filename(self) -> None:
         self.start_exercise()

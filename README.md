@@ -10,7 +10,7 @@ A trilha possui 15 fases, 14 checkpoints obrigatórios e um projeto final:
 
 | Fase | Assuntos principais |
 |---|---|
-| 1. Fundamentos | Git e GitHub, JVM, JDK, JRE, estrutura Java, tipos, operadores, entrada e saída, condicionais, loops, arrays e strings. |
+| 1. Fundamentos | IntelliJ IDEA, organização do projeto, execução de classes e testes, terminal integrado, Git e GitHub, JVM, JDK, JRE, estrutura Java, tipos, operadores, entrada e saída, condicionais, loops, arrays e strings. |
 | 2. Estrutura do código | Métodos, parâmetros, retornos, sobrecarga, varargs, escopo, packages, classes, objetos e membros `static`. |
 | 3. Orientação a Objetos | Encapsulamento, herança, polimorfismo, composição, interfaces, classes abstratas, `equals` e `hashCode`. |
 | 4. APIs essenciais | Collections, Generics, Enum, Record, classes seladas, exceptions, Optional, BigDecimal, datas, arquivos e annotations. |
@@ -84,9 +84,15 @@ vamos começar o aprendizado de Java
 
 O Codex lerá as regras em `AGENTS.md`, usará a skill `java-learning` e continuará sempre pelo estado registrado em `.learning/progress.json`. Cada aluno deve trabalhar somente em sua própria cópia; este repositório permanece como o template limpo da trilha.
 
+## IntelliJ IDEA desde o início
+
+Depois do diagnóstico opcional, a primeira aula regular apresenta o IntelliJ IDEA antes de Git e dos fundamentos de Java. O aluno aprende o que é uma IDE, reconhece as áreas principais da interface e entende a organização do projeto Maven: `pom.xml`, Maven Wrapper, `src/main/java`, `src/test/java`, packages, classes, métodos e testes.
+
+A prática mostra como localizar arquivos e ações, executar e interromper uma classe, rodar um método de teste, uma classe de teste e a suíte completa, além de interpretar sucesso, falha, erro de compilação e stack trace. O aluno também usa o terminal integrado para executar o Maven Wrapper e aprende a rodar somente o arquivo de teste da aula. Esse mesmo terminal será usado em seguida para Git.
+
 ## Git e GitHub desde o início
 
-Git fará parte da rotina desde a primeira atividade. **Git** é o sistema de controle de versão que registra a evolução local dos arquivos; **GitHub** é a plataforma remota onde o repositório pode ser armazenado, sincronizado e compartilhado. A primeira aula após o diagnóstico apresenta o fluxo entre diretório de trabalho, área de preparação (*staging*) e histórico do repositório.
+Git fará parte da rotina desde o começo da trilha, logo após a aula inicial do IntelliJ IDEA. **Git** é o sistema de controle de versão que registra a evolução local dos arquivos; **GitHub** é a plataforma remota onde o repositório pode ser armazenado, sincronizado e compartilhado. A aula apresenta o fluxo entre diretório de trabalho, área de preparação (*staging*) e histórico do repositório.
 
 O aluno aprenderá gradualmente a:
 
@@ -103,9 +109,9 @@ Depois que esses fundamentos forem apresentados, cada exercício aprovado també
 
 Ao final da trilha, o projeto final deverá estar em um repositório GitHub público ou privado do aluno, com a branch principal sincronizada, histórico compreensível, `.gitignore` adequado, nenhuma credencial versionada, testes passando e um README que explique como preparar, executar e testar a aplicação.
 
-## IntelliJ IDEA, bugs e investigação
+## IntelliJ IDEA avançado, bugs e investigação
 
-Na fase de Engenharia de software, a trilha também ensina a usar o IntelliJ IDEA como ferramenta de trabalho. A prática inclui abrir e importar projetos Maven, reconhecer a estrutura do projeto, navegar entre classes e usos, buscar arquivos, símbolos e ações, executar aplicações e testes, criar configurações de execução e depuração, usar o terminal integrado e aplicar com segurança recursos de geração de código e refatoração.
+Na fase de Engenharia de software, a trilha aprofunda o IntelliJ IDEA depois que o aluno já domina o fluxo básico. A prática inclui navegar por declarações, implementações e usos, criar configurações de Run/Debug, usar breakpoints e inspeções, gerar e formatar código e aplicar refatorações seguras com pré-visualização.
 
 Um **bug** é um comportamento observável diferente do esperado. Um **PBI** (*Product Backlog Item*) é um item priorizado do backlog que descreve valor, necessidade ou trabalho a realizar; ele pode representar uma funcionalidade, uma melhoria, uma pesquisa técnica ou até a correção de um bug. Para evitar confundir sintoma com causa, cada item será estudado com contexto, comportamento esperado, comportamento atual, passos de reprodução, evidências e critérios de aceite.
 

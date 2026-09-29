@@ -14,6 +14,7 @@ target/
 .DS_Store
 
 # Temporários e segredos
+.learning/backups/
 *.log
 *.tmp
 *.bak

@@ -7,7 +7,9 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -185,7 +187,17 @@ class LearningStore:
                     f"aula atual sem pré-requisitos: {', '.join(sorted(missing_prerequisites))}"
                 )
             expected = self._next_available(state["completedLessons"])
-            if expected and expected["id"] != lesson_id:
+            legacy_git_in_progress = (
+                expected
+                and expected["id"] == "intellij-idea-foundations"
+                and lesson_id == "git-github-foundations"
+                and state["status"]
+                in {"WAITING_FOR_STUDENT", "REVIEWING", "NEEDS_CORRECTION"}
+                and state.get("exercise")
+                and "initial-diagnostic" in completed
+                and "intellij-idea-foundations" not in completed
+            )
+            if expected and expected["id"] != lesson_id and not legacy_git_in_progress:
                 raise LearningError(
                     f"aula atual não é a próxima ação determinística: esperado={expected['id']}"
                 )
@@ -197,6 +209,32 @@ class LearningStore:
     def current_lesson(self, state: dict[str, Any]) -> dict[str, Any] | None:
         lesson_id = state.get("lesson")
         return self.lesson_by_id.get(lesson_id) if lesson_id else None
+
+    def lesson_directory(self, lesson: dict[str, Any]) -> str:
+        """Retorna o diretório canônico que organiza os arquivos de uma aula."""
+        if lesson not in self.lessons:
+            raise LearningError(f"aula desconhecida: {lesson.get('id', '?')}")
+        if lesson["kind"] == "diagnostic":
+            return "lesson00_diagnostico_inicial"
+        regular_lessons = [item for item in self.lessons if item["kind"] != "diagnostic"]
+        position = regular_lessons.index(lesson) + 1
+        directory_name = lesson.get(
+            "directoryName", f"lesson{position:02d}_{lesson['id'].replace('-', '_')}"
+        )
+        return directory_name
+
+    @staticmethod
+    def concept_filename(lesson: dict[str, Any]) -> str:
+        """Retorna o nome legível e estável do material conceitual da aula."""
+        normalized = unicodedata.normalize("NFKD", lesson["title"])
+        ascii_title = "".join(
+            character for character in normalized if not unicodedata.combining(character)
+        )
+        words = re.findall(r"[A-Za-z0-9]+", ascii_title)
+        name = "".join(word[:1].upper() + word[1:] for word in words)
+        if not name:
+            raise LearningError(f"título de aula inválido: {lesson['title']!r}")
+        return f"CONCEITO_{name}.md"
 
     def continue_action(self) -> dict[str, Any]:
         state = self.load_state()
@@ -243,9 +281,9 @@ class LearningStore:
         self._write_session(
             lesson["title"],
             "a preparar",
-            "objetivo e conceito em apresentação",
+            "material conceitual em preparação",
             f"{lesson['title']} (`TEACHING`)",
-            "criar starter e testes do exercício",
+            "criar material conceitual, starter e testes do exercício",
         )
         return {"status": state["status"], "lesson": lesson}
 
@@ -265,8 +303,28 @@ class LearningStore:
 
         lesson = self.current_lesson(state)
         assert lesson is not None
+        expected_directory = self.lesson_directory(lesson)
+        if source_path.parent.name != expected_directory:
+            raise LearningError(
+                f"source deve ficar na pasta da aula {expected_directory}"
+            )
+        if test_path.parent.name != expected_directory:
+            raise LearningError(
+                f"teste deve ficar na pasta da aula {expected_directory}"
+            )
+        concept_name = self.concept_filename(lesson)
+        concept_relative = (source_path.parent / concept_name).relative_to(self.root)
+        concept_path = self._exercise_path(
+            concept_relative.as_posix(), Path("src/main/java")
+        )
+        if not concept_path.is_file():
+            raise LearningError(
+                f"{concept_name} deve existir na mesma pasta do source"
+            )
+
         state["exercise"] = {
             "name": name.strip(),
+            "concept": concept_path.relative_to(self.root).as_posix(),
             "source": source_path.relative_to(self.root).as_posix(),
             "test": test_path.relative_to(self.root).as_posix(),
             "attempts": 0,
@@ -282,7 +340,7 @@ class LearningStore:
             name,
             "aguardando implementação",
             f"{lesson['title']} (`WAITING_FOR_STUDENT`)",
-            "o aluno implementa e informa “terminei”",
+            "o aluno lê o material conceitual, realiza a prática e informa “terminei”",
         )
         return {"status": state["status"], "exercise": state["exercise"]}
 
@@ -296,16 +354,68 @@ class LearningStore:
                 f"review-start exige WAITING_FOR_STUDENT; atual={state['status']}"
             )
         exercise = state["exercise"]
-        for field in ("source", "test"):
-            path = self._exercise_path(
-                exercise[field], Path("src/main/java") if field == "source" else Path("src/test/java")
-            )
+        paths_to_check = [("source", Path("src/main/java")), ("test", Path("src/test/java"))]
+        if "concept" in exercise:
+            paths_to_check.insert(0, ("concept", Path("src/main/java")))
+        for field, required_root in paths_to_check:
+            path = self._exercise_path(exercise[field], required_root)
             if not path.is_file():
                 raise LearningError(f"arquivo ativo ausente: {exercise[field]}")
         exercise["attempts"] += 1
         state["status"] = "REVIEWING"
         self._save(state, "REVIEWING", f"tentativa {exercise['attempts']} iniciada")
         return {"status": state["status"], "resumed": False, "exercise": exercise}
+
+    def migrate_active_concept_filename(self) -> dict[str, Any]:
+        """Atualiza o caminho do conceito ativo após uma convenção de nome ser alterada."""
+        state = self.load_state()
+        self._ensure_no_revision(state)
+        exercise = state.get("exercise")
+        lesson = self.current_lesson(state)
+        if not exercise or lesson is None:
+            raise LearningError("não há exercício ativo para migrar")
+
+        source_path = self._exercise_path(exercise["source"], Path("src/main/java"))
+        target_path = source_path.parent / self.concept_filename(lesson)
+        if not target_path.is_file():
+            raise LearningError(
+                f"material conceitual esperado ausente: {target_path.relative_to(self.root)}"
+            )
+        previous = exercise.get("concept")
+        exercise["concept"] = target_path.relative_to(self.root).as_posix()
+        self._save(state, "CONCEPT_FILENAME_MIGRATED", f"conceito atualizado: {previous}")
+        return {"exercise": exercise, "migrated": previous != exercise["concept"]}
+
+    def migrate_active_exercise_directory(self) -> dict[str, Any]:
+        """Atualiza os caminhos ativos depois que a pasta da aula foi renomeada."""
+        state = self.load_state()
+        self._ensure_no_revision(state)
+        exercise = state.get("exercise")
+        lesson = self.current_lesson(state)
+        if not exercise or lesson is None:
+            raise LearningError("não há exercício ativo para migrar")
+
+        expected_directory = self.lesson_directory(lesson)
+        source_path = self._exercise_path(exercise["source"], Path("src/main/java"))
+        test_path = self._exercise_path(exercise["test"], Path("src/test/java"))
+        target_source = source_path.parent.parent / expected_directory / source_path.name
+        target_test = test_path.parent.parent / expected_directory / test_path.name
+        if not target_source.is_file() or not target_test.is_file():
+            raise LearningError(
+                f"source e teste devem estar na pasta renomeada {expected_directory}"
+            )
+
+        exercise["source"] = target_source.relative_to(self.root).as_posix()
+        exercise["test"] = target_test.relative_to(self.root).as_posix()
+        concept_path = target_source.parent / self.concept_filename(lesson)
+        if concept_path.is_file():
+            exercise["concept"] = concept_path.relative_to(self.root).as_posix()
+        self._save(
+            state,
+            "EXERCISE_DIRECTORY_MIGRATED",
+            f"arquivos atualizados para {expected_directory}",
+        )
+        return {"exercise": exercise, "directory": expected_directory}
 
     def skip_initial_diagnostic(self) -> dict[str, Any]:
         state = self.load_state()
@@ -318,10 +428,25 @@ class LearningStore:
         exercise = state.get("exercise")
         if exercise:
             files_to_archive: list[tuple[Path, Path]] = []
+            if "concept" not in exercise:
+                source_path = self._exercise_path(exercise["source"], Path("src/main/java"))
+                legacy_concept = source_path.parent / self.concept_filename(lesson)
+                if not legacy_concept.exists():
+                    legacy_concept = source_path.parent / "CONCEITO.md"
+                if legacy_concept.exists():
+                    archived = legacy_concept.with_suffix(f"{legacy_concept.suffix}.skipped")
+                    if archived.exists():
+                        raise LearningError(
+                            f"arquivo de diagnóstico arquivado já existe: {archived}"
+                        )
+                    files_to_archive.append((legacy_concept, archived))
             for field, required_root in (
+                ("concept", Path("src/main/java")),
                 ("source", Path("src/main/java")),
                 ("test", Path("src/test/java")),
             ):
+                if field not in exercise:
+                    continue
                 path = self._exercise_path(exercise[field], required_root)
                 if not path.exists():
                     continue
@@ -372,6 +497,66 @@ class LearningStore:
             "skipped": True,
             "nextLesson": next_lesson,
             "archivedFiles": archived_files,
+        }
+
+    def reset_after_diagnostic(self) -> dict[str, Any]:
+        state = self.load_state()
+        target = self.lesson_by_id.get("intellij-idea-foundations")
+        if target is None:
+            raise LearningError("a aula intellij-idea-foundations não existe no currículo")
+
+        timestamp = utc_now().replace(":", "-")
+        backup_dir = self.learning_dir / "backups" / timestamp
+        suffix = 2
+        while backup_dir.exists():
+            backup_dir = self.learning_dir / "backups" / f"{timestamp}-{suffix}"
+            suffix += 1
+        backup_dir.mkdir(parents=True)
+        for path in (self.progress_path, self.history_path, self.session_path):
+            if path.is_file():
+                shutil.copy2(path, backup_dir / path.name)
+
+        reset_state = {
+            "version": state["version"],
+            "track": "java",
+            "module": target["module"],
+            "lesson": target["id"],
+            "status": "READY",
+            "exercise": None,
+            "completedLessons": ["initial-diagnostic"],
+            "requiredCheckpoint": None,
+            "revision": None,
+            "lastResult": {
+                "lesson": "initial-diagnostic",
+                "exercise": None,
+                "outcome": "COMPLETED",
+                "testsPassed": True,
+                "analysisPassed": True,
+                "summary": "diagnóstico inicial preservado como concluído após a limpeza",
+                "at": utc_now(),
+            },
+            "updatedAt": utc_now(),
+        }
+        self.validate_state(reset_state)
+        self._write_state(reset_state)
+        self.history_path.write_text("# Histórico de aprendizagem\n", encoding="utf-8")
+        self._append_history(
+            reset_state,
+            "RESET_AFTER_DIAGNOSTIC",
+            "histórico limpo; diagnóstico inicial mantido como concluído",
+        )
+        self._write_session(
+            "Diagnóstico inicial",
+            "nenhum",
+            "concluído antes da limpeza do histórico",
+            f"{target['title']} (`READY`)",
+            "começar a primeira aula regular",
+        )
+        return {
+            "status": reset_state["status"],
+            "lesson": target,
+            "completedLessons": reset_state["completedLessons"],
+            "backup": backup_dir.relative_to(self.root).as_posix(),
         }
 
     def review_result(
@@ -541,7 +726,9 @@ class LearningStore:
         eligible = {
             lesson["id"]
             for lesson in self.lessons
-            if lesson["module"] == "fundamentals" and lesson["kind"] == "lesson"
+            if lesson["module"] == "fundamentals"
+            and lesson["kind"] == "lesson"
+            and lesson.get("diagnosticEligible", True)
         }
         invalid = candidates.difference(eligible)
         if invalid:
@@ -624,6 +811,9 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("teach")
     subparsers.add_parser("review-start")
     subparsers.add_parser("skip-diagnostic")
+    subparsers.add_parser("migrate-active-concept-filename")
+    subparsers.add_parser("migrate-active-exercise-directory")
+    subparsers.add_parser("reset-after-diagnostic")
     subparsers.add_parser("summary")
     subparsers.add_parser("feedback-list")
 
@@ -664,6 +854,12 @@ def main(argv: list[str] | None = None) -> int:
             output = store.review_start()
         elif args.command == "skip-diagnostic":
             output = store.skip_initial_diagnostic()
+        elif args.command == "migrate-active-concept-filename":
+            output = store.migrate_active_concept_filename()
+        elif args.command == "migrate-active-exercise-directory":
+            output = store.migrate_active_exercise_directory()
+        elif args.command == "reset-after-diagnostic":
+            output = store.reset_after_diagnostic()
         elif args.command == "review-result":
             mastered = [item.strip() for item in args.mastered.split(",") if item.strip()]
             output = store.review_result(

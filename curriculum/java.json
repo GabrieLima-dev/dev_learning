@@ -1,6 +1,6 @@
 {
   "track": "java",
-  "version": 4,
+  "version": 5,
   "languageLevel": 25,
   "scope": "Java e backend como eixo principal, com Git e GitHub como prática contínua e arquitetura, microsserviços, QA, frontend e infraestrutura complementares.",
   "sourceDocuments": [
@@ -15,7 +15,7 @@
     }
   ],
   "modules": [
-    {"id": "fundamentals", "title": "Fundamentos", "result": "Versionar a própria evolução, resolver problemas simples e explicar a execução de um programa Java."},
+    {"id": "fundamentals", "title": "Fundamentos", "result": "Usar o IntelliJ IDEA e seus testes com autonomia, versionar a própria evolução, resolver problemas simples e explicar a execução de um programa Java."},
     {"id": "code-structure", "title": "Estrutura do código", "result": "Organizar comportamento em métodos, classes e packages."},
     {"id": "oop", "title": "Orientação a Objetos", "result": "Modelar domínio com responsabilidades, identidade e contratos."},
     {"id": "java-apis", "title": "APIs essenciais", "result": "Manipular dados com os principais tipos e APIs da plataforma."},
@@ -41,11 +41,23 @@
       "prerequisites": []
     },
     {
+      "id": "intellij-idea-foundations",
+      "module": "fundamentals",
+      "title": "IntelliJ IDEA e primeiros passos no projeto",
+      "directoryName": "lesson01_intellij",
+      "kind": "lesson",
+      "diagnosticEligible": false,
+      "objective": "Explicar o que é uma IDE e como ela reúne edição, navegação, execução, testes e terminal; abrir e reconhecer o projeto Maven; compreender a função de pom.xml, Maven Wrapper, src/main/java, src/test/java, packages, classes, métodos e testes; usar ações e atalhos básicos para localizar arquivos e comandos; executar e interromper uma classe, um teste, uma classe de teste e a suíte completa pela interface; usar o terminal integrado para executar Maven, um arquivo de teste específico e, nas aulas seguintes, Git; distinguir sucesso, falha, erro de compilação e stack trace nos resultados.",
+      "prerequisites": ["initial-diagnostic"]
+    },
+    {
       "id": "git-github-foundations",
       "module": "fundamentals",
       "title": "Git e GitHub desde o início",
+      "directoryName": "lesson02_git",
       "kind": "lesson",
-      "objective": "Explicar repositório, diretório de trabalho, staging e commit; inspecionar mudanças com status e diff; preparar e registrar um commit coerente; consultar o histórico; configurar identidade e .gitignore; conectar um remoto GitHub e sincronizar mudanças sem versionar credenciais ou artefatos locais.",
+      "diagnosticEligible": false,
+      "objective": "Diferenciar Git como sistema de controle de versão local e distribuído de GitHub como hospedagem e colaboração remota; compreender repositório, diretório de trabalho, arquivos rastreados ou não, staging area, commit, hash, histórico, branch principal e remoto; configurar identidade; inspecionar mudanças com status e diff; preparar arquivos específicos, revisar o staged e registrar um commit coerente; consultar o histórico; usar .gitignore e proteger segredos; reconhecer init e clone; conferir origin e sincronizar com pull e push, distinguindo efeitos locais de alterações no GitHub.",
       "prerequisites": ["initial-diagnostic"]
     },
     {
@@ -482,9 +494,9 @@
     {
       "id": "intellij-idea-workflow",
       "module": "engineering",
-      "title": "IntelliJ IDEA: projeto, comandos e fluxo de trabalho",
+      "title": "IntelliJ IDEA: produtividade, Run/Debug e refatoração",
       "kind": "lesson",
-      "objective": "Importar e sincronizar um projeto Maven, navegar por arquivos, símbolos, declarações, usos e ações, executar aplicações e testes, configurar Run/Debug e usar terminal, geração de código, formatação e refatorações seguras no IntelliJ IDEA.",
+      "objective": "Aprofundar o fluxo já conhecido do IntelliJ IDEA: navegar por símbolos, declarações, implementações e usos; criar e compartilhar configurações Run/Debug; usar breakpoints e inspeções; gerar e formatar código; renomear e aplicar refatorações seguras com pré-visualização; integrar essas ferramentas à investigação e manutenção do projeto.",
       "prerequisites": ["git-github-collaboration"]
     },
     {

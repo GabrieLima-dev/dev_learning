@@ -4,7 +4,7 @@ Esta trilha transforma em prática progressiva o conteúdo de referência de `ja
 
 | Fase | Conteúdo principal | Resultado esperado |
 |---|---|---|
-| 1. Fundamentos | diagnóstico, Git e GitHub, JVM/JDK/JRE, estrutura Java, variáveis, tipos, operadores, entrada/saída, condicionais, loops, arrays e strings | Versionar a própria evolução, resolver problemas simples e explicar como um programa Java é compilado e executado. |
+| 1. Fundamentos | diagnóstico, IntelliJ IDEA, organização do projeto, execução de testes, terminal integrado, Git e GitHub, JVM/JDK/JRE, estrutura Java, variáveis, tipos, operadores, entrada/saída, condicionais, loops, arrays e strings | Usar a IDE e os testes com autonomia, versionar a própria evolução, resolver problemas simples e explicar como um programa Java é compilado e executado. |
 | 2. Estrutura do código | métodos, parâmetros, retorno, sobrecarga, varargs, escopo, packages, classes, objetos, construtores e membros `static` | Organizar comportamento e modelar objetos simples. |
 | 3. Orientação a Objetos | encapsulamento, herança, polimorfismo, composição, interfaces, classes abstratas, `equals` e `hashCode` | Modelar responsabilidades, identidade e contratos. |
 | 4. APIs essenciais | Collections, Generics, Enum, Record, classes seladas, exceptions, Optional, BigDecimal, datas, arquivos, annotations e reflexão | Manipular dados com os principais tipos e APIs da plataforma. |
@@ -28,6 +28,7 @@ Esta trilha transforma em prática progressiva o conteúdo de referência de `ja
 - Abstrações corporativas são estudadas como referência; primeiro são usados os recursos nativos da linguagem e do framework.
 - Tecnologias antigas citadas no material servem como contexto, não como recomendação automática para projetos novos.
 - Frontend e QA são conteúdos complementares: a cobrança principal continua sendo Java/backend.
+- A primeira aula regular ensina o fluxo básico do IntelliJ IDEA e a leitura dos testes antes de introduzir Git ou fundamentos de Java.
 - Git é uma prática transversal: depois da aula inicial, toda atividade aprovada termina com revisão das mudanças e commit; cada checkpoint inclui sincronização com o GitHub.
 
 ## Progressão de Git e GitHub
@@ -44,7 +45,7 @@ O projeto final exige um repositório GitHub público ou privado do aluno com a 
 
 A fase de Engenharia de software inclui três etapas práticas adicionais:
 
-1. **Produtividade com IntelliJ IDEA** — importar e sincronizar o projeto Maven; reconhecer Project, Editor, Terminal, Maven e Services; navegar por declarações, implementações e usos; pesquisar arquivos, símbolos, texto e ações; executar aplicações e testes; configurar Run/Debug; gerar código; formatar; renomear e refatorar com pré-visualização.
+1. **Produtividade avançada com IntelliJ IDEA** — aprofundar a base apresentada no início da trilha; navegar por declarações, implementações e usos; pesquisar símbolos e ações; criar configurações Run/Debug; usar breakpoints e inspeções; gerar código; formatar; renomear e refatorar com pré-visualização.
 2. **Bugs, PBIs e critérios de aceite** — diferenciar defeito, sintoma e causa; entender um PBI como item priorizado de trabalho; transformar relatos vagos em comportamento esperado versus atual, contexto, passos de reprodução, evidências e critérios verificáveis; distinguir prioridade de severidade.
 3. **Debugger e análise de causa raiz** — reproduzir a falha antes da mudança, reduzir o cenário, interpretar erros, stack traces e logs, criar hipóteses, observar o fluxo com breakpoints, stepping, call stack, variáveis, watches e avaliação de expressões, corrigir a causa e proteger o comportamento com teste de regressão.
 

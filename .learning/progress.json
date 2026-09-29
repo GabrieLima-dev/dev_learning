@@ -2,12 +2,30 @@
   "version": 1,
   "track": "java",
   "module": "fundamentals",
-  "lesson": "initial-diagnostic",
-  "status": "READY",
-  "exercise": null,
-  "completedLessons": [],
+  "lesson": "git-github-foundations",
+  "status": "WAITING_FOR_STUDENT",
+  "exercise": {
+    "name": "Primeiro commit e sincronização com GitHub",
+    "concept": "src/main/java/dev/learning/fundamentals/lesson02_git/CONCEITO_GitEGitHubDesdeOInicio.md",
+    "source": "src/main/java/dev/learning/fundamentals/lesson02_git/GitWorkspaceMarker.java",
+    "test": "src/test/java/dev/learning/fundamentals/lesson02_git/GitWorkspaceMarkerTest.java",
+    "attempts": 1,
+    "createdAt": "2026-09-28T20:26:54Z"
+  },
+  "completedLessons": [
+    "initial-diagnostic",
+    "intellij-idea-foundations"
+  ],
   "requiredCheckpoint": null,
   "revision": null,
-  "lastResult": null,
-  "updatedAt": "2026-09-26T00:00:00Z"
+  "lastResult": {
+    "lesson": "git-github-foundations",
+    "exercise": "Primeiro commit e sincronização com GitHub",
+    "outcome": "NEEDS_CORRECTION",
+    "testsPassed": true,
+    "analysisPassed": false,
+    "summary": "CONCEPT: a alteração existe, mas os arquivos da prática ainda não foram preparados nem registrados em um commit próprio.",
+    "at": "2026-09-29T10:41:53Z"
+  },
+  "updatedAt": "2026-09-29T10:41:53Z"
 }

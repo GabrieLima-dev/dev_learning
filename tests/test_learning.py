@@ -24,11 +24,20 @@ class LearningStoreTest(unittest.TestCase):
     def tearDown(self) -> None:
         self.temporary.cleanup()
 
-    def create_exercise_files(self, feedback: bool = False) -> tuple[str, str]:
-        source = Path("src/main/java/dev/learning/Diagnostic.java")
-        test = Path("src/test/java/dev/learning/DiagnosticTest.java")
+    def create_exercise_files(self, feedback: bool = False) -> tuple[str, str, str]:
+        lesson = self.store.current_lesson(self.store.load_state())
+        assert lesson is not None
+        directory = self.store.lesson_directory(lesson)
+        concept = Path(
+            f"src/main/java/dev/learning/{directory}/{self.store.concept_filename(lesson)}"
+        )
+        source = Path(f"src/main/java/dev/learning/{directory}/Diagnostic.java")
+        test = Path(f"src/test/java/dev/learning/{directory}/DiagnosticTest.java")
         (self.root / source).parent.mkdir(parents=True, exist_ok=True)
         (self.root / test).parent.mkdir(parents=True, exist_ok=True)
+        (self.root / concept).write_text(
+            "# Diagnóstico inicial\n\n[Prática](./Diagnostic.java)\n", encoding="utf-8"
+        )
         marker = "// DEV_LEARNING_FEEDBACK[LOGIC]: reveja a condição\n" if feedback else ""
         (self.root / source).write_text(
             f"package dev.learning;\n{marker}public class Diagnostic {{}}\n", encoding="utf-8"
@@ -36,10 +45,10 @@ class LearningStoreTest(unittest.TestCase):
         (self.root / test).write_text(
             "package dev.learning;\nclass DiagnosticTest {}\n", encoding="utf-8"
         )
-        return source.as_posix(), test.as_posix()
+        return concept.as_posix(), source.as_posix(), test.as_posix()
 
     def start_exercise(self, feedback: bool = False) -> None:
-        source, test = self.create_exercise_files(feedback)
+        _, source, test = self.create_exercise_files(feedback)
         self.store.teach()
         self.store.assign("Diagnostico", source, test)
 
@@ -49,12 +58,72 @@ class LearningStoreTest(unittest.TestCase):
         self.assertEqual("READY", self.store.load_state()["status"])
         self.assertEqual("TEACH", self.store.continue_action()["action"])
 
+    def test_lesson_directories_start_with_regular_lessons(self) -> None:
+        self.assertEqual(
+            "lesson00_diagnostico_inicial",
+            self.store.lesson_directory(self.store.lesson_by_id["initial-diagnostic"]),
+        )
+        self.assertEqual(
+            "lesson01_intellij",
+            self.store.lesson_directory(self.store.lesson_by_id["intellij-idea-foundations"]),
+        )
+        self.assertEqual(
+            "lesson02_git",
+            self.store.lesson_directory(self.store.lesson_by_id["git-github-foundations"]),
+        )
+
     def test_prepare_exercise_stops_for_student(self) -> None:
         self.start_exercise()
         state = self.store.load_state()
         self.assertEqual("WAITING_FOR_STUDENT", state["status"])
         self.assertEqual("WAIT_FOR_STUDENT", self.store.continue_action()["action"])
         self.assertEqual("Diagnostico", state["exercise"]["name"])
+        self.assertEqual(
+            "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md",
+            state["exercise"]["concept"],
+        )
+
+    def test_exercise_requires_concept_file_next_to_source(self) -> None:
+        concept, source, test = self.create_exercise_files()
+        (self.root / concept).unlink()
+        self.store.teach()
+
+        with self.assertRaisesRegex(LearningError, "CONCEITO_DiagnosticoInicial.md"):
+            self.store.assign("Diagnostico", source, test)
+
+    def test_exercise_requires_the_numbered_lesson_directory(self) -> None:
+        _, source, test = self.create_exercise_files()
+        invalid_source = Path("src/main/java/dev/learning/diagnostic/Diagnostic.java")
+        invalid_concept = invalid_source.parent / "CONCEITO_DiagnosticoInicial.md"
+        (self.root / invalid_source).parent.mkdir(parents=True)
+        shutil.copy2(self.root / source, self.root / invalid_source)
+        shutil.copy2(
+            self.root
+            / "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md",
+            self.root / invalid_concept,
+        )
+        self.store.teach()
+
+        with self.assertRaisesRegex(LearningError, "lesson00_diagnostico_inicial"):
+            self.store.assign("Diagnostico", invalid_source.as_posix(), test)
+
+    def test_active_concept_path_can_be_migrated_to_the_new_filename(self) -> None:
+        self.start_exercise()
+        state = self.store.load_state()
+        state["exercise"]["concept"] = (
+            "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO.md"
+        )
+        (self.root / ".learning/progress.json").write_text(
+            json.dumps(state), encoding="utf-8"
+        )
+
+        result = self.store.migrate_active_concept_filename()
+
+        self.assertTrue(result["migrated"])
+        self.assertEqual(
+            "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md",
+            result["exercise"]["concept"],
+        )
 
     def test_initial_diagnostic_can_be_skipped_before_it_starts(self) -> None:
         result = self.store.skip_initial_diagnostic()
@@ -63,29 +132,77 @@ class LearningStoreTest(unittest.TestCase):
         self.assertTrue(result["skipped"])
         self.assertEqual([], result["archivedFiles"])
         self.assertIn("initial-diagnostic", state["completedLessons"])
-        self.assertEqual("git-github-foundations", state["lesson"])
+        self.assertEqual("intellij-idea-foundations", state["lesson"])
         self.assertEqual("READY", state["status"])
         self.assertEqual("SKIPPED", state["lastResult"]["outcome"])
 
     def test_skipping_active_diagnostic_archives_its_files(self) -> None:
         self.start_exercise()
-        source = self.root / "src/main/java/dev/learning/Diagnostic.java"
-        test = self.root / "src/test/java/dev/learning/DiagnosticTest.java"
+        concept = (
+            self.root
+            / "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md"
+        )
+        source = self.root / "src/main/java/dev/learning/lesson00_diagnostico_inicial/Diagnostic.java"
+        test = self.root / "src/test/java/dev/learning/lesson00_diagnostico_inicial/DiagnosticTest.java"
 
         result = self.store.skip_initial_diagnostic()
 
+        self.assertFalse(concept.exists())
         self.assertFalse(source.exists())
         self.assertFalse(test.exists())
+        self.assertTrue(concept.with_suffix(".md.skipped").is_file())
         self.assertTrue(source.with_suffix(".java.skipped").is_file())
         self.assertTrue(test.with_suffix(".java.skipped").is_file())
-        self.assertEqual(2, len(result["archivedFiles"]))
+        self.assertEqual(3, len(result["archivedFiles"]))
         self.assertIsNone(self.store.load_state()["exercise"])
+
+    def test_skipping_legacy_diagnostic_also_archives_sibling_concept(self) -> None:
+        self.start_exercise()
+        state = self.store.load_state()
+        del state["exercise"]["concept"]
+        (self.root / ".learning/progress.json").write_text(
+            json.dumps(state), encoding="utf-8"
+        )
+
+        result = self.store.skip_initial_diagnostic()
+
+        archived = (
+            self.root
+            / "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md.skipped"
+        )
+        self.assertTrue(archived.is_file())
+        self.assertIn(
+            "src/main/java/dev/learning/lesson00_diagnostico_inicial/CONCEITO_DiagnosticoInicial.md.skipped",
+            result["archivedFiles"],
+        )
 
     def test_only_initial_diagnostic_can_be_skipped(self) -> None:
         self.store.skip_initial_diagnostic()
 
         with self.assertRaisesRegex(LearningError, "somente o diagnóstico inicial"):
             self.store.skip_initial_diagnostic()
+
+    def test_reset_after_diagnostic_clears_progress_and_creates_backup(self) -> None:
+        self.start_exercise()
+        source = self.root / "src/main/java/dev/learning/lesson00_diagnostico_inicial/Diagnostic.java"
+        test = self.root / "src/test/java/dev/learning/lesson00_diagnostico_inicial/DiagnosticTest.java"
+
+        result = self.store.reset_after_diagnostic()
+        state = self.store.load_state()
+
+        self.assertEqual("READY", state["status"])
+        self.assertEqual("intellij-idea-foundations", state["lesson"])
+        self.assertEqual(["initial-diagnostic"], state["completedLessons"])
+        self.assertIsNone(state["exercise"])
+        self.assertTrue(source.is_file())
+        self.assertTrue(test.is_file())
+        backup = self.root / result["backup"]
+        self.assertTrue((backup / "progress.json").is_file())
+        self.assertTrue((backup / "history.md").is_file())
+        self.assertTrue((backup / "session.md").is_file())
+        history = (self.root / ".learning/history.md").read_text(encoding="utf-8")
+        self.assertIn("RESET_AFTER_DIAGNOSTIC", history)
+        self.assertNotIn("WAITING_FOR_STUDENT", history)
 
     def test_paths_cannot_escape_workspace_or_expected_source_root(self) -> None:
         self.store.teach()
@@ -135,8 +252,19 @@ class LearningStoreTest(unittest.TestCase):
         state = self.store.load_state()
         self.assertTrue(result["passed"])
         self.assertEqual("READY", state["status"])
-        self.assertEqual("git-github-foundations", state["lesson"])
+        self.assertEqual("intellij-idea-foundations", state["lesson"])
         self.assertIsNone(state["exercise"])
+
+        self.start_exercise()
+        self.store.review_start()
+        self.store.review_result(
+            "passed",
+            tests_passed=True,
+            analysis_passed=True,
+            summary="fundamentos do IntelliJ IDEA demonstrados",
+        )
+        state = self.store.load_state()
+        self.assertEqual("git-github-foundations", state["lesson"])
 
         self.start_exercise()
         self.store.review_start()
@@ -149,6 +277,51 @@ class LearningStoreTest(unittest.TestCase):
         state = self.store.load_state()
         self.assertEqual("input-output", state["lesson"])
         self.assertIsNone(state["exercise"])
+
+    def test_diagnostic_cannot_skip_intellij_foundations(self) -> None:
+        self.start_exercise()
+        self.store.review_start()
+
+        with self.assertRaisesRegex(LearningError, "não diagnosticáveis"):
+            self.store.review_result(
+                "passed",
+                tests_passed=True,
+                analysis_passed=True,
+                summary="tentativa de pular a primeira aula",
+                mastered=["intellij-idea-foundations"],
+            )
+
+    def test_active_git_exercise_from_previous_curriculum_is_preserved(self) -> None:
+        concept, source, test = self.create_exercise_files()
+        state = self.store.load_state()
+        state["lesson"] = "git-github-foundations"
+        state["status"] = "WAITING_FOR_STUDENT"
+        state["completedLessons"] = ["initial-diagnostic"]
+        state["exercise"] = {
+            "name": "GitPractice",
+            "concept": concept,
+            "source": source,
+            "test": test,
+            "attempts": 0,
+            "createdAt": "2026-01-01T00:00:00Z",
+        }
+        (self.root / ".learning/progress.json").write_text(
+            json.dumps(state), encoding="utf-8"
+        )
+
+        reopened = LearningStore(self.root)
+        self.assertEqual(
+            "git-github-foundations", reopened.continue_action()["lesson"]["id"]
+        )
+        reopened.review_start()
+        reopened.review_result(
+            "passed",
+            tests_passed=True,
+            analysis_passed=True,
+            summary="atividade legada concluída",
+        )
+
+        self.assertEqual("intellij-idea-foundations", reopened.load_state()["lesson"])
 
     def test_diagnostic_does_not_skip_a_prerequisite_gap(self) -> None:
         self.start_exercise()

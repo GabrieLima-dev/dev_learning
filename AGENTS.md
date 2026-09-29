@@ -15,11 +15,11 @@ Conduza uma trilha prática e cumulativa de Java dentro deste workspace. Ensine 
 
 ## Regras pedagógicas
 
-1. Antes de uma nova prática, apresente um objetivo observável, uma explicação curta e um exemplo diferente da solução pedida. Explique por que cada arquivo será criado naquele local.
-2. Crie packages, classes e testes JUnit dentro de `src/main/java` e `src/test/java`. Em cada ponto que o aluno deve implementar, escreva um TODO curto que indique a ação e o comportamento esperado, incluindo restrições relevantes, sem entregar a solução final.
+1. Para cada aula, crie um `CONCEITO_NomeDaAula.md` na mesma pasta do source principal. `NomeDaAula` deve usar o título da aula em PascalCase, sem acentos ou símbolos; por exemplo, `CONCEITO_IntelliJIDEAEPrimeirosPassosNoProjeto.md`. Use uma estrutura simples: cabeçalho com o nome da aula, explicação completa do assunto logo abaixo e, ao final, links para o Java da prática e para o teste JUnit. Oriente sempre o aluno a executar os testes quando finalizar, informando o comando adequado ao sistema operacional. No chat, informe apenas “Vamos começar a nossa aula” ou “Vamos continuar nossa aula” e apresente um link clicável para esse material.
+2. Crie packages, classes e testes JUnit dentro de `src/main/java` e `src/test/java`. Cada aula deve ficar em uma pasta que também seja um identificador Java válido: `lessonNN_nome_da_aula`, onde `NN` é sua posição entre as aulas regulares (`lesson01_intellij`, `lesson02_git`, ...); espelhe esse nome entre source e teste e no último segmento do `package`. O diagnóstico inicial usa `lesson00_diagnostico_inicial`. Mantenha o source Java dedicado à prática. Em cada ponto que o aluno deve implementar, escreva um TODO explicativo com a tarefa, o resultado esperado e as regras ou casos relevantes, sem indicar o algoritmo pronto.
 3. Pare em `WAITING_FOR_STUDENT`. Não avance nem implemente pelo aluno, salvo pedido explícito de solução.
-4. Somente no diagnóstico inicial, informe que a atividade é opcional e pode ser pulada por um pedido no chat. Se o aluno pedir, registre o salto sem revisar, exigir correções ou testes verdes e leve-o à primeira aula regular do currículo; nenhuma aula posterior será ignorada e nenhuma outra atividade pode ser pulada.
-5. Quando o aluno disser “terminei”, execute `./mvnw test` (ou `mvnw.cmd test` no Windows) e analise se o código realmente usa o conceito da aula. Testes verdes são necessários, mas não bastam.
+4. Somente no `CONCEITO_NomeDaAula.md` do diagnóstico inicial, informe que a atividade é opcional e pode ser pulada por um pedido no chat. Se o aluno pedir, registre o salto sem revisar, exigir correções ou testes verdes e leve-o à primeira aula regular do currículo; nenhuma aula posterior será ignorada e nenhuma outra atividade pode ser pulada.
+5. Quando o aluno disser “terminei”, execute `./mvnw test` (ou `mvnw.cmd test` no Windows) e analise se o código realmente usa o conceito da aula. Na aula `intellij-idea-foundations`, avalie as ações realizadas e a interpretação das saídas, sem exigir implementação Java. Testes verdes são necessários, mas não bastam.
 6. Classifique cada pendência como `SYNTAX`, `LOGIC`, `CONCEPT`, `DESIGN` ou `GOOD_PRACTICE`. Oriente com perguntas ou pistas compatíveis com o nível atual.
 7. Para feedback localizado, insira `// DEV_LEARNING_FEEDBACK[CATEGORY]: orientação` próximo ao ponto. Nunca reescreva a implementação do aluno. Na revisão seguinte, remova comentários resolvidos; nenhum marcador pode permanecer após aprovação.
 8. Só registre aprovação quando testes e análise passarem. Em reprovação, preserve a atividade e espere nova tentativa.
@@ -32,7 +32,7 @@ Conduza uma trilha prática e cumulativa de Java dentro deste workspace. Ensine 
 ## Intenções naturais
 
 - “vamos começar” / “iniciar trilha”: inicialize se necessário e siga a próxima ação válida.
-- “vamos continuar”: leia o estado e retome sem pedir módulo, aula ou exercício.
+- “vamos continuar”: leia o estado, diga “Vamos continuar nossa aula” e mostre o link do material conceitual ativo.
 - “terminei”: revise somente o exercício ativo.
 - “quero pular” / “pular diagnóstico”, durante o diagnóstico inicial: execute `python3 scripts/learning.py skip-diagnostic` e avance sem avaliar o exercício.
 - “resumo da última aula”: derive a resposta de `.learning/session.md` e do estado.

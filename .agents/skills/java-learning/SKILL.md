@@ -17,7 +17,7 @@ Escolha somente o fluxo indicado pela saída. O currículo é a fonte de ordem e
 
 - Ação `TEACH`: leia [teach-and-assign.md](references/teach-and-assign.md).
 - Ação `CREATE_EXERCISE`: retome a criação descrita em [teach-and-assign.md](references/teach-and-assign.md), sem repetir a aula inteira.
-- Ação `WAIT_FOR_STUDENT`: diga qual exercício está ativo e aguarde. Se o aluno disser “terminei”, leia [review.md](references/review.md).
+- Ação `WAIT_FOR_STUDENT`: se o aluno disser “terminei”, leia [review.md](references/review.md). Caso contrário, diga “Vamos continuar nossa aula” e mostre somente o link clicável do `CONCEITO.md` ativo.
 - Ação `RESUME_REVIEW`: leia [review.md](references/review.md) e reinicie a verificação; uma execução interrompida não conta como aprovação.
 - Pedido para pular o diagnóstico inicial: siga a seção específica de [teach-and-assign.md](references/teach-and-assign.md).
 - Pedido de resumo: execute `python3 scripts/learning.py summary` e responda de forma curta.

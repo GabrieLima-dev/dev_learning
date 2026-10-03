@@ -83,50 +83,9 @@ vamos começar o aprendizado de Java
 ```
 
 O Codex lerá as regras em `AGENTS.md`, usará a skill `java-learning` e continuará sempre pelo estado registrado em `.learning/progress.json`. Cada aluno deve trabalhar somente em sua própria cópia; este repositório permanece como o template limpo da trilha.
-
-## IntelliJ IDEA desde o início
-
-Depois do diagnóstico opcional, a primeira aula regular apresenta o IntelliJ IDEA antes de Git e dos fundamentos de Java. O aluno aprende o que é uma IDE, reconhece as áreas principais da interface e entende a organização do projeto Maven: `pom.xml`, Maven Wrapper, `src/main/java`, `src/test/java`, packages, classes, métodos e testes.
-
-A prática mostra como localizar arquivos e ações, executar e interromper uma classe, rodar um método de teste, uma classe de teste e a suíte completa, além de interpretar sucesso, falha, erro de compilação e stack trace. O aluno também usa o terminal integrado para executar o Maven Wrapper e aprende a rodar somente o arquivo de teste da aula. Esse mesmo terminal será usado em seguida para Git.
-
-## Git e GitHub desde o início
-
-Git fará parte da rotina desde o começo da trilha, logo após a aula inicial do IntelliJ IDEA. **Git** é o sistema de controle de versão que registra a evolução local dos arquivos; **GitHub** é a plataforma remota onde o repositório pode ser armazenado, sincronizado e compartilhado. A aula apresenta o fluxo entre diretório de trabalho, área de preparação (*staging*) e histórico do repositório.
-
-O aluno aprenderá gradualmente a:
-
-- inspecionar alterações com `git status` e `git diff`;
-- selecionar mudanças com `git add` e criar commits pequenos e claros com `git commit`;
-- consultar o histórico com `git log` e comparar versões;
-- desfazer alterações com segurança, entendendo antes o que será descartado;
-- configurar `.gitignore` e nunca versionar senhas, tokens, chaves, arquivos `.env`, caches ou artefatos de build;
-- conferir o remoto e explicar como `git pull` e `git push` sincronizam um repositório, sem exigir publicação no GitHub nesta primeira prática;
-- trabalhar com branches usando `git switch`, integrar mudanças e resolver conflitos conscientemente;
-- revisar diferenças, usar Pull Requests e marcar versões relevantes do projeto.
-
-Depois que esses fundamentos forem apresentados, cada exercício aprovado também incluirá a revisão do diff e um commit coerente. Os checkpoints serão enviados ao GitHub para manter uma cópia remota atualizada. O tutor orientará os comandos e explicará o efeito de cada um; operações que possam apagar trabalho não serão tratadas como atalhos comuns.
+ Os checkpoints serão enviados ao GitHub para manter uma cópia remota atualizada. O tutor orientará os comandos e explicará o efeito de cada um; operações que possam apagar trabalho não serão tratadas como atalhos comuns.
 
 Ao final da trilha, o projeto final deverá estar em um repositório GitHub público ou privado do aluno, com a branch principal sincronizada, histórico compreensível, `.gitignore` adequado, nenhuma credencial versionada, testes passando e um README que explique como preparar, executar e testar a aplicação.
-
-## IntelliJ IDEA avançado, bugs e investigação
-
-Na fase de Engenharia de software, a trilha aprofunda o IntelliJ IDEA depois que o aluno já domina o fluxo básico. A prática inclui navegar por declarações, implementações e usos, criar configurações de Run/Debug, usar breakpoints e inspeções, gerar e formatar código e aplicar refatorações seguras com pré-visualização.
-
-Um **bug** é um comportamento observável diferente do esperado. Um **PBI** (*Product Backlog Item*) é um item priorizado do backlog que descreve valor, necessidade ou trabalho a realizar; ele pode representar uma funcionalidade, uma melhoria, uma pesquisa técnica ou até a correção de um bug. Para evitar confundir sintoma com causa, cada item será estudado com contexto, comportamento esperado, comportamento atual, passos de reprodução, evidências e critérios de aceite.
-
-A investigação de um bug seguirá um processo reproduzível:
-
-1. Entender o relato e definir claramente o resultado esperado e o resultado atual.
-2. Reproduzir a falha no menor cenário possível e registrar dados, ambiente e passos usados.
-3. Ler mensagens de erro, stack traces, logs e testes antes de alterar o código.
-4. Formular hipóteses e acompanhar o fluxo com breakpoints, execução passo a passo, pilha de chamadas, variáveis, watches, avaliação de expressões e breakpoints condicionais ou logpoints.
-5. Localizar a causa raiz, distinguindo-a do ponto onde o sintoma apareceu.
-6. Criar um teste que falhe pelo motivo correto, quando o caso puder ser automatizado.
-7. Fazer a menor correção coerente e verificar efeitos colaterais.
-8. Executar o teste de regressão e a suíte relacionada, conferir os critérios de aceite e registrar a evidência da correção.
-
-O objetivo não é decorar todos os atalhos da IDE, mas aprender a encontrar comandos e usar as ferramentas certas para navegar, executar, observar e validar o software com autonomia.
 
 ## Começar
 

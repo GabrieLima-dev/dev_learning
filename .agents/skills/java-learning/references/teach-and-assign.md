@@ -59,6 +59,16 @@ Para `git-github-collaboration`, combine uma alteração pequena compatível com
 
 ## Criar o exercício
 
+### Progressão cumulativa
+
+Em cada aula regular de Java, crie de três a cinco exercícios pequenos e independentes, organizados por dificuldade crescente no mesmo source e no mesmo arquivo de teste da aula. Marque cada bloco no Java com `// Exercício N — título curto` e apresente a mesma sequência no material conceitual.
+
+1. **Fundamento:** aplica o conceito novo a uma entrada simples, com poucos valores e resultado objetivo.
+2. **Aplicação:** combina duas ou mais regras do conceito novo e cobre um caso alternativo importante.
+3. **Cumulativo:** reutiliza pelo menos um conceito já concluído quando ele for naturalmente necessário para resolver o problema atual.
+
+Use os níveis adicionais quando o conteúdo justificar, sem adicionar dificuldade artificial. Não obrigue o aluno a encaixar todos os assuntos anteriores: IntelliJ e Git continuam como práticas operacionais, e um conceito Java anterior só entra quando melhora a prática. O último exercício deve ser o mais completo e mostrar explicitamente, no TODO, quais conhecimentos anteriores ele reutiliza. Os testes devem ter um método ou grupo de métodos para cada exercício, com nomes e mensagens que indiquem o comportamento esperado. O exercício registrado continua sendo um único source e um único teste da aula; a sequência de níveis fica dentro deles.
+
 1. Reuse o domínio e as classes existentes quando isso fizer sentido; não reconstrua o projeto.
 2. Use uma pasta própria para a aula dentro de `src/main/java/dev/learning/...`, com o nome `lessonNN_nome_da_aula`, que seja também um identificador Java válido. `NN` é a posição entre as aulas regulares, com pelo menos dois dígitos; as duas primeiras são `lesson01_intellij` e `lesson02_git`. O diagnóstico inicial usa `lesson00_diagnostico_inicial`. O nome padrão deriva do `id` da aula com hífens trocados por `_`, salvo `directoryName` definido no currículo. Espelhe exatamente esse nome na pasta correspondente em `src/test/java` e no último segmento do `package`. Nessa pasta, crie `CONCEITO_NomeDaAula.md`, usando o título em PascalCase, sem acentos ou símbolos, com estrutura simples e conteúdo completo, adequado ao nível atual.
 
@@ -71,6 +81,7 @@ Para `git-github-collaboration`, combine uma alteração pequena compatível com
    - cubra definição, finalidade, funcionamento, termos e regras importantes para compreender o conceito;
    - inclua exemplos em blocos de código para cada sintaxe ou mecanismo que o aluno precisará reconhecer; use domínio e valores diferentes da prática para não entregar sua solução e explique o papel de cada linha essencial logo após o exemplo;
    - inclua alertas sobre erros comuns quando forem relevantes;
+   - antes dos links finais, apresente a progressão dos exercícios por nível, dizendo qual conceito novo cada nível pratica e qual conhecimento anterior é retomado no nível cumulativo;
    - ao final, inclua um link relativo para o source Java da aula;
    - logo depois, oriente o aluno a executar os testes quando terminar e inclua um link relativo para o arquivo JUnit correspondente.
 

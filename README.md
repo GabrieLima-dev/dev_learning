@@ -1,165 +1,170 @@
 # DEV_LEARNING
 
-Trilha prática e cumulativa de Java, arquitetura e microsserviços conduzida pelo Codex. O aprendizado começa nos fundamentos da linguagem e evolui até a construção, os testes e o deploy de um microsserviço completo.
-
-O currículo, o progresso e a avaliação ficam registrados no próprio projeto. Assim, uma nova sessão continua exatamente do ponto anterior, preservando exercícios, revisões e resultados. Java e backend são o eixo principal; frontend, QA e infraestrutura aparecem como conhecimentos complementares para compreender a aplicação de ponta a ponta.
+Uma trilha prática para aprender Java de forma progressiva: você lê o conceito, resolve exercícios com dificuldade crescente, roda os testes e recebe uma revisão antes de seguir para a próxima aula.
 
 ## O que você vai aprender
 
-A trilha possui 15 fases, 14 checkpoints obrigatórios e um projeto final:
-
-| Fase | Assuntos principais |
+| Fase | Ao final, você será capaz de |
 |---|---|
-| 1. Fundamentos | IntelliJ IDEA, organização do projeto, execução de classes e testes, terminal integrado, Git e GitHub, JVM, JDK, JRE, estrutura Java, tipos, operadores, entrada e saída, condicionais, loops, arrays e strings. |
-| 2. Estrutura do código | Métodos, parâmetros, retornos, sobrecarga, varargs, escopo, packages, classes, objetos e membros `static`. |
-| 3. Orientação a Objetos | Encapsulamento, herança, polimorfismo, composição, interfaces, classes abstratas, `equals` e `hashCode`. |
-| 4. APIs essenciais | Collections, Generics, Enum, Record, classes seladas, exceptions, Optional, BigDecimal, datas, arquivos e annotations. |
-| 5. Java funcional e moderno | Lambdas, interfaces funcionais, Streams, pattern matching, text blocks e imutabilidade. |
-| 6. Concorrência | Threads, executors, futures, sincronização, tipos atômicos, coleções concorrentes e virtual threads. |
-| 7. SQL e acesso a dados | Modelo relacional, JDBC, pool de conexões, CRUD, joins, transações, batch, paginação, migrations e Repository. |
-| 8. Engenharia de software | Maven, Gradle, branches e colaboração com Git/GitHub, IntelliJ IDEA, JUnit, Mockito, bugs, PBIs, debugger, investigação de causa raiz, Clean Code, refatoração, SOLID e logging. |
-| 9. Backend com Quarkus | Jakarta EE, HTTP/REST, JAX-RS, JSON, DTOs, CDI, configuração, validação, services, mappers e tratamento de erros. |
-| 10. Persistência com ORM | JPA, Hibernate, entidades, relacionamentos, queries, constraints, transações e datasources. |
-| 11. Microsserviços | Clientes HTTP, resiliência, idempotência, Kafka, Redis, jobs e processamento assíncrono. |
-| 12. Segurança e observabilidade | OAuth 2.0, OpenID Connect, JWT, segredos, OpenAPI, health checks, logs, métricas, traces e auditoria. |
-| 13. Testes e entrega | RestAssured, Testcontainers, Postman, JasperReports, Docker, pipelines, SonarQube, Kubernetes e Helm. |
-| 14. Integração web e QA | Angular, TypeScript, RxJS, estado, design system, Cypress, Appium, BrowserStack e automação com Python. |
-| 15. Projeto final | Construção, proteção, observação, teste, empacotamento e publicação documentada de um microsserviço completo em um repositório GitHub atualizado. |
+| 1. Fundamentos | Usar IntelliJ IDEA, testes, Git e GitHub; trabalhar com Java básico, tipos, operadores, entrada e saída, decisões, repetições, arrays e textos. |
+| 2. Estrutura do código | Organizar comportamentos em métodos, classes, packages, parâmetros, retornos e membros `static`. |
+| 3. Orientação a Objetos | Modelar dados e comportamentos com encapsulamento, herança, polimorfismo, composição e interfaces. |
+| 4. APIs essenciais | Manipular coleções, generics, enums, records, exceções, `Optional`, números, datas e arquivos. |
+| 5. Java funcional e moderno | Escrever transformações com lambdas, Streams, pattern matching, text blocks e imutabilidade. |
+| 6. Concorrência | Executar tarefas concorrentes com threads, executors, futures e estruturas seguras. |
+| 7. SQL e acesso a dados | Criar acesso relacional com JDBC, CRUD, joins, transações, paginação e migrations. |
+| 8. Engenharia de software | Trabalhar com Maven, Git/GitHub, testes, debugging, refatoração, SOLID e logs. |
+| 9. Backend com Quarkus | Construir APIs REST com Jakarta EE, DTOs, validação, serviços e injeção de dependência. |
+| 10. Persistência com ORM | Persistir o domínio com JPA, Hibernate, relacionamentos, queries e transações. |
+| 11. Microsserviços | Integrar serviços com HTTP, resiliência, mensageria, Kafka, Redis e processamento assíncrono. |
+| 12. Segurança e observabilidade | Proteger APIs e acompanhar sua operação com OAuth, JWT, OpenAPI, health checks, logs, métricas e traces. |
+| 13. Testes e entrega | Validar, empacotar e entregar aplicações com testes de integração, Docker, pipelines e infraestrutura. |
+| 14. Integração web e QA | Entender contratos com frontend, Angular, testes de interface e automação de QA. |
+| 15. Projeto final | Construir e publicar um microsserviço completo, testado e reproduzível. |
 
-Cada fase termina com uma prática que verifica se os conceitos foram realmente aplicados. A ordem detalhada, os objetivos e os pré-requisitos estão no [currículo](curriculum/java.json), enquanto o [roadmap](docs/roadmap.md) apresenta a visão geral da progressão.
+## Antes de começar
 
-## Como usar este repositório como template
+Instale estas ferramentas:
 
-Cada aluno deve criar o próprio repositório a partir deste template. Assim, o progresso, os exercícios e o histórico Git ficam separados da versão original da trilha, e o aluno pode fazer commits e pushes desde o início.
+- Git;
+- Java 25;
+- IntelliJ IDEA;
+- Python 3.10 ou superior;
+- AI Chat com Codex habilitado no IntelliJ IDEA.
 
-### 1. Criar seu repositório
+O Maven já vem preparado no projeto pelo Maven Wrapper, então não precisa ser instalado separadamente.
 
-1. No topo desta página, clique em **Use this template**.
-2. Selecione **Create a new repository**.
-3. Escolha sua conta como proprietária, defina um nome e selecione visibilidade pública ou privada.
-4. Clique em **Create repository from template**.
+## Criar sua cópia do projeto
 
-Use o template em vez de clonar diretamente este repositório. Um clone direto mantém o `origin` apontando para o projeto original, no qual o aluno não possui permissão de escrita. O repositório criado pelo template já pertence ao aluno e começa com seu próprio histórico.
+### Opção recomendada: usar o template
 
-### 2. Clonar sua cópia
+Use esta opção se você quer registrar sua evolução e criar commits no seu próprio repositório.
 
-Copie a URL do repositório recém-criado e execute:
+1. No GitHub, clique em **Use this template**.
+2. Escolha **Create a new repository**.
+3. Selecione sua conta, dê um nome ao repositório e crie sua cópia.
+4. Copie a URL HTTPS ou SSH do repositório que acabou de criar.
+
+Depois, no terminal, execute:
 
 ```bash
 git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
 cd SEU_REPOSITORIO
 ```
 
-### 3. Conferir o ambiente
+### Opção para estudar localmente: clonar este repositório
 
-É necessário ter Git, Java 25 e Python 3.10 ou superior. O Maven não precisa ser instalado separadamente porque o projeto inclui o Maven Wrapper.
-
-No Linux ou macOS:
+Se você quer apenas abrir e estudar o projeto no computador, execute:
 
 ```bash
+git clone https://github.com/GabrieLima-dev/dev_learning.git
+cd dev_learning
+```
+
+Esse clone aponta para o repositório original e normalmente não permite enviar alterações. Para guardar sua evolução no GitHub, prefira criar uma cópia pelo template.
+
+## Conferir se o projeto funciona
+
+Sempre execute os comandos a partir da pasta do projeto.
+
+No macOS ou Linux:
+
+```bash
+git --version
 java --version
 python3 --version
 ./mvnw test
-python3 scripts/validate.py
 ```
 
-No Windows:
+No Windows (PowerShell):
 
 ```powershell
+git --version
 java --version
 py -3 --version
 mvnw.cmd test
-py -3 scripts/validate.py
 ```
 
-Todos os checks devem passar antes do início da trilha. Se o sistema negar permissão para executar o Maven Wrapper no Linux ou macOS, execute uma vez `chmod +x mvnw` e repita a validação.
-
-### 4. Iniciar a trilha
-
-Abra a pasta clonada no IntelliJ IDEA e no Codex. No Codex, diga:
-
-```text
-vamos começar o aprendizado de Java
-```
-
-O Codex lerá as regras em `AGENTS.md`, usará a skill `java-learning` e continuará sempre pelo estado registrado em `.learning/progress.json`. Cada aluno deve trabalhar somente em sua própria cópia; este repositório permanece como o template limpo da trilha.
- Os checkpoints serão enviados ao GitHub para manter uma cópia remota atualizada. O tutor orientará os comandos e explicará o efeito de cada um; operações que possam apagar trabalho não serão tratadas como atalhos comuns.
-
-Ao final da trilha, o projeto final deverá estar em um repositório GitHub público ou privado do aluno, com a branch principal sincronizada, histórico compreensível, `.gitignore` adequado, nenhuma credencial versionada, testes passando e um README que explique como preparar, executar e testar a aplicação.
-
-## Começar
-
-Abra esta pasta no Codex e diga:
-
-```text
-vamos começar o aprendizado de Java
-```
-
-Depois, use linguagem natural:
-
-- `vamos continuar o aprendizado`
-- `terminei`
-- `resumo da última aula`
-- `quero revisar collections`
-
-O Codex lê [AGENTS.md](AGENTS.md), aciona a skill `java-learning` e usa o controlador de estado. Não é necessário memorizar comandos.
-
-## Como funciona a aprendizagem
-
-```text
-READY → TEACHING → WAITING_FOR_STUDENT → REVIEWING
-                                      ↘ NEEDS_CORRECTION → WAITING_FOR_STUDENT
-                                      ↘ PASSED → COMPLETED → READY
-```
-
-- `curriculum/java.json`: módulos, ordem, objetivos, checkpoints e pré-requisitos da trilha.
-- `.learning/progress.json`: posição e exercício ativo.
-- `.learning/session.md`: resumo curto da última sessão.
-- `.learning/history.md`: transições para recuperação entre sessões.
-- `src/main/java`: implementação do aluno.
-- `src/test/java`: critérios objetivos em JUnit.
-- `scripts/learning.py`: máquina de estados determinística.
-- `.agents/skills/java-learning`: fluxo pedagógico do Codex.
-
-Currículo, estado e avaliação permanecem separados. Em cada aula, o Codex apresenta o objetivo e uma explicação curta, prepara a estrutura inicial e aguarda o aluno programar. Os testes guardam os critérios objetivos; não há arquivo de metadata paralelo para cada exercício.
-
-## Ferramentas para diagnóstico
-
-Os comandos abaixo são úteis para manutenção; durante a aula o Codex os executa:
+Se o macOS ou Linux informar que `mvnw` não tem permissão de execução, rode uma vez:
 
 ```bash
-python3 scripts/learning.py status
-python3 scripts/learning.py continue
-python3 scripts/learning.py summary
-python3 scripts/validate.py
+chmod +x mvnw
+```
+
+Depois execute `./mvnw test` novamente. Um resultado com `BUILD SUCCESS` significa que o projeto está pronto.
+
+## Abrir no IntelliJ e iniciar a trilha pelo AI Chat
+
+1. Abra a pasta clonada no IntelliJ IDEA.
+2. Abra o painel **AI Chat**.
+3. Selecione **Codex** como agente do chat.
+4. Escreva:
+
+```text
+vamos começar
+```
+
+Se você já estudou antes, escreva no mesmo chat:
+
+```text
+vamos continuar
+```
+
+Não é preciso lembrar em qual aula parou: a trilha retoma o ponto salvo automaticamente. No JetBrains, o fluxo oficial é abrir o AI Chat e selecionar Codex. [Veja a documentação oficial](https://learn.chatgpt.com/docs/codex/ide).
+
+## Como funciona cada aula
+
+Cada aula segue este ciclo:
+
+1. Você recebe um arquivo `CONCEITO_...md` com explicações e exemplos em Java.
+2. Você abre o arquivo de prática indicado no conceito e lê os TODOs.
+3. Resolve os exercícios em níveis: começa pelo fundamento, aplica o conceito em um caso mais completo e termina com um desafio que reutiliza conhecimentos anteriores quando fizer sentido.
+4. Executa os testes.
+5. Quando terminar, escreve `terminei` no AI Chat.
+6. O Codex executa a suíte, revisa o uso do conceito e indica uma correção se for necessária.
+7. Após a aprovação, você revisa as mudanças e cria um commit pequeno e coerente.
+
+Os testes não são um obstáculo escondido: seus nomes e mensagens mostram o comportamento esperado. Quando algo falhar, leia primeiro a mensagem do teste e depois volte ao TODO correspondente.
+
+## Comandos que você usará durante os estudos
+
+Rodar todos os testes no macOS ou Linux:
+
+```bash
 ./mvnw test
 ```
 
-No Windows, substitua `python3` por `py -3` quando necessário e use `mvnw.cmd test`.
+Rodar todos os testes no Windows:
 
-## Avaliação
+```powershell
+mvnw.cmd test
+```
 
-Uma atividade só passa quando os testes JUnit passam, a análise confirma o uso do conceito ensinado e não restam marcadores `DEV_LEARNING_FEEDBACK`.
+Depois da aula inicial de Git, você também praticará estes comandos antes de criar seus commits:
 
-Se houver pendência, o Codex classifica o problema, comenta de forma temporária próximo ao código e aguarda nova tentativa sem sobrescrever a solução.
+```bash
+git status
+git diff
+git diff --staged
+git log --oneline
+```
 
-## Ambiente
+Evite `git add .` como atalho. Revise os arquivos e prepare somente os que pertencem à atividade que você concluiu.
 
-- Java 25
-- Maven 3.9.16 via wrapper
-- JUnit 6.1.3
-- Python 3.10+ apenas para o controlador local
+## Frases úteis para usar no AI Chat
+
+```text
+vamos começar
+vamos continuar
+terminei
+resumo da última aula
+quero revisar collections
+```
+
+## Projeto final
+
+No final da trilha, você reunirá os conhecimentos em um microsserviço. Ele deverá ter testes verdes, instruções de execução, histórico Git organizado, configuração segura e um repositório GitHub atualizado.
 
 ## Licença
 
-Este projeto utiliza a [DEV_LEARNING Mixed License 1.0](LICENSE.md), registrada em nome de Gabriel de Souza Lima.
-
-- A **área de trabalho do aluno** pode ser usada, modificada e redistribuída sob os termos permissivos descritos na licença. Ela inclui código da aplicação, testes do aluno, progresso, configurações, infraestrutura e o README do projeto final.
-- O **núcleo protegido** inclui currículo, regras e skill do agente, controlador de aprendizagem, documentação pedagógica, avaliações e testes do controlador.
-- O núcleo protegido pode ser copiado, usado e redistribuído, inclusive comercialmente, desde que permaneça sem alterações, preserve a atribuição e inclua a licença.
-- Uma cópia pode conter o núcleo protegido intacto junto com exercícios e projeto final modificados pelo aluno.
-- Versões modificadas do núcleo protegido não podem ser publicadas ou redistribuídas sem autorização prévia e escrita do titular.
-
-Esta é uma licença personalizada de código-fonte disponível (*source-available*), não uma licença open source reconhecida pela Open Source Initiative. O texto completo e a definição exata dos caminhos estão em [LICENSE.md](LICENSE.md).
-
-Veja [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md) e [docs/traceability.md](docs/traceability.md).
+Este projeto utiliza a [DEV_LEARNING Mixed License 1.0](LICENSE.md). Consulte o arquivo de licença para conhecer os termos de uso do material e do núcleo da trilha.
